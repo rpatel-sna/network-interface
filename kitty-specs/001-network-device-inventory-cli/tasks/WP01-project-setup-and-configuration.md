@@ -1,8 +1,11 @@
 ---
 work_package_id: WP01
 title: Project Setup & Configuration
-lane: planned
+lane: "doing"
 dependencies: []
+base_branch: master
+base_commit: 9f285b789553b12b8968d6c778008cfb21489d3e
+created_at: '2026-03-12T14:40:00.551790+00:00'
 subtasks:
 - T001
 - T002
@@ -10,7 +13,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "44718"
 review_status: ''
 reviewed_by: ''
 history:
