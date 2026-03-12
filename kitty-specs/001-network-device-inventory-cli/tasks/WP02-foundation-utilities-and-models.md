@@ -1,7 +1,7 @@
 ---
 work_package_id: WP02
 title: Foundation Utilities & Models
-lane: "doing"
+lane: "for_review"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -372,3 +372,4 @@ def classify_exception(exc: Exception) -> tuple[StatusType, str]:
 
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
 - 2026-03-12T15:00:54Z – claude-sonnet-4-6 – shell_pid=46671 – lane=doing – Assigned agent via workflow command
+- 2026-03-12T15:06:42Z – claude-sonnet-4-6 – shell_pid=46671 – lane=for_review – T004-T007 complete: Device+CollectionResult dataclasses, load_key+decrypt_password (Fernet), configure_logging+get_logger (RotatingFileHandler+stdout), classify_exception (timeout/auth/generic)
