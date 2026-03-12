@@ -9,6 +9,15 @@
 
 A command-line tool that collects hardware inventory data (serial numbers and firmware versions) from network devices by connecting to them over SSH, and stores the results in a central database. The tool runs on-demand and exits on completion.
 
+## Clarifications
+
+### Session 2026-03-12
+
+- Q: Which Ruckus devices are in scope for v1? → A: Both ICX switches and wireless APs/controllers
+- Q: Where does the decryption key for device passwords come from at runtime? → A: Separate key file on disk, with its path configured via an environment variable
+- Q: Do HP and Aruba devices use the same SSH commands for serial/firmware collection? → A: Treat as separate collectors for now; consolidate later if commands prove identical
+- Q: Should device_inventory keep history or overwrite per device? → A: Overwrite — always keep only the latest result (one record per device)
+
 ## User Scenarios & Testing
 
 ### User Story 1 - Full Inventory Run (Priority: P1)
@@ -83,6 +92,7 @@ An operator configures the tool by setting environment variables for database ac
 - What happens when two workers attempt to write a result for the same device simultaneously? Upsert by `device_id` prevents duplicate records.
 - What happens when a `device_type` value in the database has no corresponding collector? The device is skipped with a logged warning; all other devices proceed normally.
 - What happens when all thread workers are busy? Remaining devices are queued and processed as workers become available — no device is silently dropped.
+- What happens when the key file path is not configured or the file is missing/unreadable? Tool exits immediately at startup with a non-zero exit code and a clear error message before any device polling begins.
 
 ## Requirements
 
@@ -90,14 +100,14 @@ An operator configures the tool by setting environment variables for database ac
 
 - **FR-001**: The tool MUST query the `devices` table at startup and poll only records where `enabled = TRUE`
 - **FR-002**: The tool MUST poll devices concurrently with a configurable maximum number of parallel workers
-- **FR-003**: The tool MUST support the following device families in v1: Cisco (IOS, IOS-XE, NX-OS), HP, Aruba, and Ruckus
+- **FR-003**: The tool MUST support the following device families in v1: Cisco (IOS, IOS-XE, NX-OS), HP, Aruba, and Ruckus (both ICX switches and wireless APs/controllers — each as a distinct collector)
 - **FR-004**: The tool MUST collect a serial number and firmware version from each polled device
 - **FR-005**: The tool MUST write a result record to `device_inventory` for every poll attempt, regardless of outcome
 - **FR-006**: The tool MUST classify every result as one of: `success`, `failed`, or `timeout`
 - **FR-007**: The tool MUST record a descriptive error message for every non-success result
 - **FR-008**: The tool MUST perform an upsert (insert or update) on `device_inventory` keyed by `device_id`, so each device has at most one current result record
 - **FR-009**: The tool MUST load all database credentials and app configuration from environment variables or a `.env` file — never from hardcoded values in source code
-- **FR-010**: Device passwords stored in the `devices` table MUST be encrypted at rest and decrypted only in memory at connection time
+- **FR-010**: Device passwords stored in the `devices` table MUST be encrypted at rest; the decryption key MUST be loaded from a key file on disk whose path is configured via an environment variable, and decryption MUST occur only in memory at connection time
 - **FR-011**: The tool MUST print a completion summary showing: total devices polled, success count, failure count, and timeout count
 - **FR-012**: The tool MUST write structured logs to a configurable file path with automatic rotation
 - **FR-013**: A database connection failure at startup MUST cause the tool to exit immediately with a non-zero exit code and a descriptive error message
@@ -124,7 +134,7 @@ An operator configures the tool by setting environment variables for database ac
 - The `devices` and `device_inventory` tables are created before the tool runs (schema setup is out of scope for this feature)
 - SSH access to all managed devices is available from the host running the tool (firewall rules are pre-configured by the operator)
 - The `device_type` values stored in the `devices` table match the identifiers expected by each collector
-- "HP" and "Aruba" may share a product lineage (HP ProCurve / Aruba-branded switches) but will be implemented as separate collectors if their SSH command outputs differ
-- "Ruckus" refers to the Ruckus ICX switch family; if Ruckus wireless access points are also in scope, a separate collector will be required
+- HP and Aruba are implemented as separate collectors; if commands prove identical during development, they may be consolidated into a shared collector at that time
+- Ruckus scope confirmed: both ICX switches and wireless APs/controllers are in scope for v1, each requiring a distinct collector
 - SSH host key verification defaults to auto-accept for trusted internal networks; strict verification can be enabled via configuration
 - The tool does not send external alerts or notifications — failure visibility is through the completion summary, logs, and the `device_inventory` table only
