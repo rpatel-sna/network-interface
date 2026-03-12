@@ -1,108 +1,84 @@
-# Implementation Plan: [FEATURE]
-*Path: [templates/plan-template.md](templates/plan-template.md)*
+# Implementation Plan: Network Device Inventory CLI
 
-
-**Branch**: `[###-feature-name]` | **Date**: [DATE] | **Spec**: [link]
-**Input**: Feature specification from `/kitty-specs/[###-feature-name]/spec.md`
-
-**Note**: This template is filled in by the `/spec-kitty.plan` command. See `src/specify_cli/missions/software-dev/command-templates/plan.md` for the execution workflow.
-
-The planner will not begin until all planning questions have been answered—capture those answers in this document before progressing to later phases.
+**Branch**: `master` | **Date**: 2026-03-12 | **Spec**: [spec.md](spec.md)
+**Input**: Feature specification from `kitty-specs/001-network-device-inventory-cli/spec.md`
 
 ## Summary
 
-[Extract from feature spec: primary requirement + technical approach from research]
+On-demand Python 3.11+ CLI tool that queries MariaDB for enabled network devices, connects to each in parallel via SSH using Netmiko, collects serial numbers and firmware versions using device-type-specific commands, writes results back to MariaDB with success/failed/timeout status, and prints a completion summary. Supports Cisco (IOS, IOS-XE, NX-OS), HP ProCurve, Aruba ArubaOS-Switch, Ruckus ICX, and Ruckus wireless controllers in v1.
 
 ## Technical Context
 
-<!--
-  ACTION REQUIRED: Replace the content in this section with the technical details
-  for the project. The structure here is presented in advisory capacity to guide
-  the iteration process.
--->
-
-**Language/Version**: [e.g., Python 3.11, Swift 5.9, Rust 1.75 or NEEDS CLARIFICATION]  
-**Primary Dependencies**: [e.g., FastAPI, UIKit, LLVM or NEEDS CLARIFICATION]  
-**Storage**: [if applicable, e.g., PostgreSQL, CoreData, files or N/A]  
-**Testing**: [e.g., pytest, XCTest, cargo test or NEEDS CLARIFICATION]  
-**Target Platform**: [e.g., Linux server, iOS 15+, WASM or NEEDS CLARIFICATION]
-**Project Type**: [single/web/mobile - determines source structure]  
-**Performance Goals**: [domain-specific, e.g., 1000 req/s, 10k lines/sec, 60 fps or NEEDS CLARIFICATION]  
-**Constraints**: [domain-specific, e.g., <200ms p95, <100MB memory, offline-capable or NEEDS CLARIFICATION]  
-**Scale/Scope**: [domain-specific, e.g., 10k users, 1M LOC, 50 screens or NEEDS CLARIFICATION]
+**Language/Version**: Python 3.11+
+**Primary Dependencies**: Netmiko (SSH sessions), mariadb (MariaDB connector), cryptography (Fernet encryption), python-dotenv (env config), concurrent.futures (stdlib thread pool)
+**Storage**: MariaDB — `devices` table (input) and `device_inventory` table (output/results)
+**Testing**: pytest — integration tests only; real devices and DB required; no mocked unit tests in v1
+**Target Platform**: Linux/macOS server or workstation; plain venv; run via `python network_inventory/main.py`
+**Project Type**: Single Python CLI project
+**Performance Goals**: 50 devices complete within 5 minutes with default concurrency (10 workers, 30s SSH timeout)
+**Constraints**: SSH timeout configurable (default: 30s); max workers configurable (default: 10); DB credentials and encryption key path via env vars only; DB population out of scope
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
-
-[Gates determined based on constitution file]
+- **Python 3.11+**: Compliant — matches constitution requirement
+- **pytest**: Compliant — integration tests use pytest
+- **FastAPI**: N/A — CLI tool, no HTTP layer; constitution's FastAPI standard does not apply here
+- **Result**: No violations. No complexity justification required.
 
 ## Project Structure
 
 ### Documentation (this feature)
 
 ```
-kitty-specs/[###-feature]/
-├── plan.md              # This file (/spec-kitty.plan command output)
-├── research.md          # Phase 0 output (/spec-kitty.plan command)
-├── data-model.md        # Phase 1 output (/spec-kitty.plan command)
-├── quickstart.md        # Phase 1 output (/spec-kitty.plan command)
-├── contracts/           # Phase 1 output (/spec-kitty.plan command)
-└── tasks.md             # Phase 2 output (/spec-kitty.tasks command - NOT created by /spec-kitty.plan)
+kitty-specs/001-network-device-inventory-cli/
+├── plan.md              ← This file
+├── research.md          ← Phase 0 output
+├── data-model.md        ← Phase 1 output
+├── quickstart.md        ← Phase 1 output
+├── contracts/
+│   └── schema.sql       ← Phase 1 output (MariaDB DDL)
+└── tasks.md             ← Phase 2 output (/spec-kitty.tasks — not created here)
 ```
 
 ### Source Code (repository root)
-<!--
-  ACTION REQUIRED: Replace the placeholder tree below with the concrete layout
-  for this feature. Delete unused options and expand the chosen structure with
-  real paths (e.g., apps/admin, packages/something). The delivered plan must
-  not include Option labels.
--->
 
 ```
-# [REMOVE IF UNUSED] Option 1: Single project (DEFAULT)
-src/
+network_inventory/
+├── main.py                    # Entry point and orchestration
+├── config.py                  # Settings loaded from env / .env
+├── db/
+│   ├── __init__.py
+│   ├── connection.py          # MariaDB connection pool
+│   └── queries.py             # SQL read (devices) + upsert (device_inventory)
+├── collectors/
+│   ├── __init__.py            # device_type → collector class registry
+│   ├── base_collector.py      # Abstract base: get_serial_number(), get_firmware_version()
+│   ├── cisco_ios.py           # Cisco IOS / IOS-XE  (device_type: cisco_ios, cisco_xe)
+│   ├── cisco_nxos.py          # Cisco NX-OS          (device_type: cisco_nxos)
+│   ├── hp_procurve.py         # HP ProCurve          (device_type: hp_procurve)
+│   ├── aruba.py               # Aruba ArubaOS-Switch (device_type: aruba_procurve)
+│   ├── ruckus_icx.py          # Ruckus ICX / FastIron (device_type: ruckus_fastiron)
+│   └── ruckus_wireless.py     # Ruckus wireless controllers (see research.md caveat)
 ├── models/
-├── services/
-├── cli/
-└── lib/
+│   ├── __init__.py
+│   └── device.py              # Device + CollectionResult dataclasses
+├── utils/
+│   ├── __init__.py
+│   ├── logger.py              # RotatingFileHandler + stdout, LOG_FILE / LOG_LEVEL env vars
+│   ├── encryption.py          # Fernet key file load + decrypt helper
+│   └── error_handler.py       # Exception → status classification
+├── .env.example               # Template: all required env vars documented
+└── requirements.txt
 
 tests/
-├── contract/
-├── integration/
-└── unit/
-
-# [REMOVE IF UNUSED] Option 2: Web application (when "frontend" + "backend" detected)
-backend/
-├── src/
-│   ├── models/
-│   ├── services/
-│   └── api/
-└── tests/
-
-frontend/
-├── src/
-│   ├── components/
-│   ├── pages/
-│   └── services/
-└── tests/
-
-# [REMOVE IF UNUSED] Option 3: Mobile + API (when "iOS/Android" detected)
-api/
-└── [same as backend above]
-
-ios/ or android/
-└── [platform-specific structure: feature modules, UI flows, platform tests]
+└── integration/
+    ├── test_full_run.py       # End-to-end: DB query → SSH poll → DB write + summary
+    ├── test_collectors.py     # Per-collector: real device SSH + command output parsing
+    └── test_db.py             # DB: upsert correctness, connection failure at startup
 ```
 
-**Structure Decision**: [Document the selected structure and reference the real
-directories captured above]
+**Structure Decision**: Single project layout. `network_inventory/` is the application package; `tests/` lives at repo root for pytest auto-discovery. No web frontend, no service split, no build tooling.
 
 ## Complexity Tracking
 
-*Fill ONLY if Constitution Check has violations that must be justified*
-
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| [e.g., 4th project] | [current need] | [why 3 projects insufficient] |
-| [e.g., Repository pattern] | [specific problem] | [why direct DB access insufficient] |
+No constitution violations detected. No complexity justification required.
