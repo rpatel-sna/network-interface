@@ -115,8 +115,8 @@ Each work package is independently deliverable and testable.
 **Prompt**: `tasks/WP04-collector-architecture.md`
 
 ### Included Subtasks
-- [ ] T011 Implement `network_inventory/collectors/base_collector.py` — `BaseCollector` abstract class with Netmiko SSH + abstract `get_serial_number()` + `get_firmware_version()`
-- [ ] T012 Implement `network_inventory/collectors/__init__.py` — `COLLECTOR_REGISTRY` dict + `get_collector(device_type)` factory + unknown type warning
+- [x] T011 Implement `network_inventory/collectors/base_collector.py` — `BaseCollector` abstract class with Netmiko SSH + abstract `get_serial_number()` + `get_firmware_version()`
+- [x] T012 Implement `network_inventory/collectors/__init__.py` — `COLLECTOR_REGISTRY` dict + `get_collector(device_type)` factory + unknown type warning
 
 ### Implementation Notes
 - `BaseCollector.__init__(device: Device, settings: Settings)` — stores device + settings; does not open SSH yet.
