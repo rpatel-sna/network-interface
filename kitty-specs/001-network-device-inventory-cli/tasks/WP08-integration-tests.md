@@ -13,7 +13,7 @@ subtasks:
 - T026
 phase: Phase 2 - Integration
 assignee: ''
-agent: ''
+agent: "claude-sonnet-4-6"
 shell_pid: "82440"
 review_status: ''
 reviewed_by: ''
@@ -614,3 +614,4 @@ pytest tests/integration/ -v -m "real_device"
 > **CRITICAL**: Append new entries at the END. Never prepend.
 
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
+- 2026-03-13T16:41:32Z – claude-sonnet-4-6 – shell_pid=82440 – lane=doing – Assigned agent via workflow command
