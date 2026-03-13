@@ -1,0 +1,12 @@
+{
+  "wp_id": "WP01",
+  "feature_slug": "001-network-device-inventory-cli",
+  "worktree_path": ".worktrees/001-network-device-inventory-cli-WP01",
+  "branch_name": "001-network-device-inventory-cli-WP01",
+  "base_branch": "master",
+  "base_commit": "9f285b789553b12b8968d6c778008cfb21489d3e",
+  "dependencies": [],
+  "created_at": "2026-03-12T14:40:00.551790+00:00",
+  "created_by": "implement-command",
+  "vcs_backend": "git"
+}
