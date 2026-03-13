@@ -258,9 +258,9 @@ Each work package is independently deliverable and testable.
 **Prompt**: `tasks/WP08-integration-tests.md`
 
 ### Included Subtasks
-- [ ] T024 [P] `tests/integration/test_db.py` — upsert correctness, connection failure at startup, minimal-privilege check
-- [ ] T025 [P] `tests/integration/test_full_run.py` — full run happy path (US1), disabled device exclusion (US3), partial-failure run (US2)
-- [ ] T026 [P] `tests/integration/test_collectors.py` — per-collector SSH tests with real device annotation; skip markers for unavailable hardware
+- [x] T024 [P] `tests/integration/test_db.py` — upsert correctness, connection failure at startup, minimal-privilege check
+- [x] T025 [P] `tests/integration/test_full_run.py` — full run happy path (US1), disabled device exclusion (US3), partial-failure run (US2)
+- [x] T026 [P] `tests/integration/test_collectors.py` — per-collector SSH tests with real device annotation; skip markers for unavailable hardware
 
 ### Implementation Notes
 - All tests load config from `.env.test` (or `TEST_` prefixed env vars) — never use production credentials.
