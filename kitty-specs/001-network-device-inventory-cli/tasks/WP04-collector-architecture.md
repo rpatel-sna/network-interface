@@ -1,16 +1,19 @@
 ---
 work_package_id: WP04
 title: Collector Architecture
-lane: planned
+lane: "doing"
 dependencies:
 - WP01
+base_branch: 001-network-device-inventory-cli-WP01
+base_commit: eca7140efd847a0ddb947a2d2f5386076aef9fbd
+created_at: '2026-03-13T01:04:21.864404+00:00'
 subtasks:
 - T011
 - T012
 phase: Phase 0 - Foundation
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "57162"
 review_status: ''
 reviewed_by: ''
 history:
