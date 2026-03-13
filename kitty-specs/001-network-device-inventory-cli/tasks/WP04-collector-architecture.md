@@ -12,7 +12,7 @@ subtasks:
 - T012
 phase: Phase 0 - Foundation
 assignee: ''
-agent: ''
+agent: "claude-sonnet-4-6"
 shell_pid: "57162"
 review_status: ''
 reviewed_by: ''
@@ -335,3 +335,4 @@ __all__ = ["COLLECTOR_REGISTRY", "get_collector", "BaseCollector"]
 > **CRITICAL**: Append new entries at the END. Never prepend.
 
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
+- 2026-03-13T01:04:22Z – claude-sonnet-4-6 – shell_pid=57162 – lane=doing – Assigned agent via workflow command
