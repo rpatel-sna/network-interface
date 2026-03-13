@@ -1,9 +1,12 @@
 ---
 work_package_id: WP08
 title: Integration Tests
-lane: planned
+lane: "doing"
 dependencies:
 - WP07
+base_branch: 001-network-device-inventory-cli-WP07
+base_commit: cf5fe12eacba8af2cfca573a1d165bd6860e4799
+created_at: '2026-03-13T16:41:31.552420+00:00'
 subtasks:
 - T024
 - T025
@@ -11,7 +14,7 @@ subtasks:
 phase: Phase 2 - Integration
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "82440"
 review_status: ''
 reviewed_by: ''
 history:
