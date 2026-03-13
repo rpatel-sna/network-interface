@@ -12,7 +12,7 @@ subtasks:
 - T014
 phase: Phase 1 - Collectors
 assignee: ''
-agent: ''
+agent: "claude-sonnet-4-6"
 shell_pid: "58642"
 review_status: ''
 reviewed_by: ''
@@ -262,3 +262,4 @@ NAME: "Chassis",  DESCR: "Nexus7700 C7706 (6 Slot) Chassis"
 > **CRITICAL**: Append new entries at the END. Never prepend.
 
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
+- 2026-03-13T01:15:51Z – claude-sonnet-4-6 – shell_pid=58642 – lane=doing – Assigned agent via workflow command
