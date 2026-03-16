@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Project Setup & Configuration
-lane: "for_review"
+lane: "doing"
 dependencies: []
 base_branch: master
 base_commit: 9f285b789553b12b8968d6c778008cfb21489d3e
@@ -13,7 +13,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "44718"
+shell_pid: "17424"
 review_status: ''
 reviewed_by: ''
 history:
@@ -264,3 +264,4 @@ LOG_LEVEL=INFO
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
 - 2026-03-12T14:40:00Z – claude-sonnet-4-6 – shell_pid=44718 – lane=doing – Assigned agent via workflow command
 - 2026-03-12T14:43:35Z – claude-sonnet-4-6 – shell_pid=44718 – lane=for_review – T001-T003 complete: directory structure, config.py with EnvironmentError validation, .env.example, requirements.txt, .gitignore all committed
+- 2026-03-16T14:26:33Z – claude-sonnet-4-6 – shell_pid=17424 – lane=doing – Started review via workflow command
