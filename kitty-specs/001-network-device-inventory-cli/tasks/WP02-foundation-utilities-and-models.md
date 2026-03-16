@@ -1,7 +1,7 @@
 ---
 work_package_id: WP02
 title: Foundation Utilities & Models
-lane: "planned"
+lane: "doing"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -15,7 +15,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "19430"
+shell_pid: "20252"
 review_status: "has_feedback"
 reviewed_by: "rpatel-hk"
 review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP02.md"
@@ -443,3 +443,4 @@ def classify_exception(exc: Exception) -> tuple[StatusType, str]:
 - 2026-03-12T15:06:42Z – claude-sonnet-4-6 – shell_pid=46671 – lane=for_review – T004-T007 complete: Device+CollectionResult dataclasses, load_key+decrypt_password (Fernet), configure_logging+get_logger (RotatingFileHandler+stdout), classify_exception (timeout/auth/generic)
 - 2026-03-16T14:36:51Z – claude-sonnet-4-6 – shell_pid=19430 – lane=doing – Started review via workflow command
 - 2026-03-16T14:38:32Z – claude-sonnet-4-6 – shell_pid=19430 – lane=planned – Moved to planned
+- 2026-03-16T14:42:57Z – claude-sonnet-4-6 – shell_pid=20252 – lane=doing – Started implementation via workflow command
