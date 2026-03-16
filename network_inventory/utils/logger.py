@@ -5,32 +5,29 @@ import logging
 import sys
 from logging.handlers import RotatingFileHandler
 
+from network_inventory.config import settings
+
 _LOG_FORMAT = "%(asctime)s | %(levelname)s | %(name)s | %(message)s"
 _DATE_FORMAT = "%Y-%m-%dT%H:%M:%S"
 
 _configured = False
 
 
-def configure_logging(log_file: str = "inventory.log", log_level: str = "INFO") -> None:
-    """Set up root logger handlers. Call once at application startup.
-
-    Args:
-        log_file: Path to the rotating log file.
-        log_level: Logging verbosity (DEBUG, INFO, WARNING, ERROR).
-    """
+def configure_logging() -> None:
+    """Set up root logger handlers. Call once at application startup."""
     global _configured
     if _configured:
         return
     _configured = True
 
-    level = getattr(logging, log_level.upper(), logging.INFO)
+    level = getattr(logging, settings.log_level.upper(), logging.INFO)
 
     root = logging.getLogger()
     root.setLevel(level)
 
     # File handler with rotation (10 MB per file, 5 backups)
     file_handler = RotatingFileHandler(
-        log_file,
+        settings.log_file,
         maxBytes=10 * 1024 * 1024,
         backupCount=5,
         encoding="utf-8",
