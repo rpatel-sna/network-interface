@@ -1,7 +1,7 @@
 ---
 work_package_id: WP07
 title: Core Orchestration
-lane: "doing"
+lane: "planned"
 dependencies:
 - WP02
 base_branch: 001-network-device-inventory-cli-WP02
@@ -17,8 +17,9 @@ phase: Phase 2 - Integration
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "26684"
-review_status: ''
-reviewed_by: ''
+review_status: "has_feedback"
+reviewed_by: "rpatel-hk"
+review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP07.md"
 history:
 - timestamp: '2026-03-12T10:45:33Z'
   lane: planned
@@ -47,9 +48,108 @@ requirement_refs:
 
 ## Review Feedback
 
-*[Empty initially.]*
+**Reviewed by**: rpatel-hk
+**Status**: ❌ Changes Requested
+**Date**: 2026-03-16
+**Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP07.md`
 
----
+# Review Feedback: WP07 — CHANGES REQUESTED
+
+## Issue 1 (High): logger.py regressed — parameterized signature re-introduced
+
+WP07 modified `network_inventory/utils/logger.py` back to the old parameterized form:
+
+```python
+# WP07 (WRONG — reverts WP02 fix)
+def configure_logging(log_file: str = "inventory.log", log_level: str = "INFO") -> None:
+```
+
+WP02 fixed this to be a no-argument function that reads from the `settings` singleton:
+
+```python
+# WP02 correct version
+from network_inventory.config import settings
+
+def configure_logging() -> None:
+    """Set up root logger handlers. Call once at application startup."""
+    ...
+    level = getattr(logging, settings.log_level.upper(), logging.INFO)
+    file_handler = RotatingFileHandler(settings.log_file, ...)
+```
+
+`logger.py` must NOT be in WP07's deliverables at all — it was fixed in WP02 and should be
+left untouched. Remove the change to `logger.py` from this WP.
+
+## Issue 2 (High): main.py calls configure_logging() with arguments
+
+Line 45 of `main.py`:
+
+```python
+configure_logging(log_file=settings.log_file, log_level=settings.log_level)
+```
+
+This must be changed to the no-arg call that matches the WP02 contract:
+
+```python
+configure_logging()
+```
+
+The settings-import order in `main.py` (load settings → configure_logging) also contradicts
+the spec which calls `configure_logging()` first. However, since `configure_logging()` now
+reads `settings` internally, the correct sequence in `main.py` is:
+
+```python
+from network_inventory.utils.logger import configure_logging, get_logger
+try:
+    from network_inventory.config import settings
+except EnvironmentError as exc:
+    print(f"Configuration error: {exc}", file=sys.stderr)
+    sys.exit(1)
+configure_logging()           # no args — reads settings internally
+logger = get_logger(__name__)
+```
+
+## Issue 3 (Medium): .gitignore — Spec Kitty managed entries stripped
+
+The WP07 diff removes the `# Added by Spec Kitty CLI (auto-managed)` block from `.gitignore`.
+`logger.py` and `.gitignore` are both outside WP07's deliverable scope — do not touch either.
+
+The `.gitignore` must retain the Spec Kitty entries (same fix as WP01):
+
+```
+# Added by Spec Kitty CLI (auto-managed)
+.claude/
+.codex/
+.opencode/
+.windsurf/
+.gemini/
+.cursor/
+.qwen/
+.kilocode/
+.augment/
+.roo/
+.amazonq/
+.github/copilot/
+.kittify/.dashboard
+.kittify/missions/__pycache__/
+```
+
+## Required Actions
+
+1. **Revert `logger.py`** to the WP02 state (no-arg, reads from `settings`). Either revert
+   the file outright or exclude it from the WP07 commit entirely.
+2. **Fix `main.py` line 45**: change `configure_logging(log_file=..., log_level=...)` → `configure_logging()`.
+3. **Restore `.gitignore`**: prepend the Spec Kitty managed block back.
+4. Re-commit and re-submit for review.
+
+## Dependent Warning
+
+WP08 stacks on WP07. Once this WP is fixed and merged, WP08 must rebase:
+```
+cd .worktrees/001-network-device-inventory-cli-WP08
+git rebase 001-network-device-inventory-cli-WP07
+```
+
 
 ## Objectives & Success Criteria
 
@@ -359,3 +459,4 @@ if __name__ == "__main__":
 - 2026-03-13T16:00:20Z – claude-sonnet-4-6 – shell_pid=78396 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T16:02:40Z – claude-sonnet-4-6 – shell_pid=78396 – lane=for_review – T019-T023 complete: main() with ordered startup (logging→config→key file→DB pool→device load→dispatch→upsert→summary), ThreadPoolExecutor with future_to_device dict, defensive future.result() guard, per-write DB connection acquire/release in main thread, zero-devices exit 0, summary format matching quickstart.md
 - 2026-03-16T16:31:26Z – claude-sonnet-4-6 – shell_pid=26684 – lane=doing – Started review via workflow command
+- 2026-03-16T17:48:11Z – claude-sonnet-4-6 – shell_pid=26684 – lane=planned – Moved to planned
