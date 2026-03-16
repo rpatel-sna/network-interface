@@ -1,7 +1,7 @@
 ---
 work_package_id: WP04
 title: Collector Architecture
-lane: "doing"
+lane: "planned"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -14,8 +14,9 @@ phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "24218"
-review_status: ''
-reviewed_by: ''
+review_status: "has_feedback"
+reviewed_by: "rpatel-hk"
+review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP04.md"
 history:
 - timestamp: '2026-03-12T10:45:33Z'
   lane: planned
@@ -40,9 +41,37 @@ requirement_refs:
 
 ## Review Feedback
 
-*[Empty initially.]*
+**Reviewed by**: rpatel-hk
+**Status**: ❌ Changes Requested
+**Date**: 2026-03-16
+**Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP04.md`
 
----
+## Review Feedback
+
+**Issue: WP04 imports from WP02 modules but is not stacked on WP02**
+
+`network_inventory/collectors/base_collector.py` imports:
+```python
+from network_inventory.models.device import CollectionResult, Device      # WP02
+from network_inventory.utils.encryption import decrypt_password            # WP02
+from network_inventory.utils.error_handler import classify_exception       # WP02
+```
+
+None of these files exist in the WP04 worktree (`models/device.py`, `utils/encryption.py`, `utils/error_handler.py` are all missing). The branch is stacked only on WP01, so WP02 deliverables are absent.
+
+**Fix**: Rebase the WP04 branch onto WP02 (which is `done`):
+
+```bash
+cd .worktrees/001-network-device-inventory-cli-WP04
+git rebase 001-network-device-inventory-cli-WP02
+```
+
+No code changes are needed — the implementation is correct and matches the spec.
+
+**All other deliverables are correct:**
+- `base_collector.py` — `del plaintext_password` immediately after `ConnectHandler()`, `session_log=None`, `finally: self._disconnect()`, abstract methods enforced via ABC, `collect()` template method returns `CollectionResult` and never raises
+- `collectors/__init__.py` — `COLLECTOR_REGISTRY` dict, `get_collector()` with `WARNING` on unknown type, `try/except ImportError` wrappers for WP05/WP06 modules, `__all__` correct
+
 
 ## Objectives & Success Criteria
 
@@ -338,3 +367,4 @@ __all__ = ["COLLECTOR_REGISTRY", "get_collector", "BaseCollector"]
 - 2026-03-13T01:04:22Z – claude-sonnet-4-6 – shell_pid=57162 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T01:05:32Z – claude-sonnet-4-6 – shell_pid=57162 – lane=for_review – T011-T012 complete: BaseCollector abstract class (connect/collect/disconnect template, session_log=None, del plaintext_password), COLLECTOR_REGISTRY with try/except ImportError scaffolding for WP05+WP06, get_collector() with WARNING on unknown type
 - 2026-03-16T15:20:52Z – claude-sonnet-4-6 – shell_pid=24218 – lane=doing – Started review via workflow command
+- 2026-03-16T16:06:01Z – claude-sonnet-4-6 – shell_pid=24218 – lane=planned – Moved to planned
