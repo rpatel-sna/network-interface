@@ -1,7 +1,7 @@
 ---
 work_package_id: WP03
 title: Database Layer
-lane: "doing"
+lane: "planned"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -15,8 +15,9 @@ phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "20703"
-review_status: ''
-reviewed_by: ''
+review_status: "has_feedback"
+reviewed_by: "rpatel-hk"
+review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP03.md"
 history:
 - timestamp: '2026-03-12T10:45:33Z'
   lane: planned
@@ -39,9 +40,38 @@ requirement_refs:
 
 ## Review Feedback
 
-*[Empty initially.]*
+**Reviewed by**: rpatel-hk
+**Status**: ❌ Changes Requested
+**Date**: 2026-03-16
+**Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP03.md`
 
----
+## Review Feedback
+
+**Issue: WP03 imports from WP02 (`models/device.py`) but is not stacked on WP02**
+
+`network_inventory/db/queries.py` line 8:
+```python
+from network_inventory.models.device import CollectionResult, Device
+```
+
+`network_inventory/models/device.py` was introduced by WP02. It does **not** exist in the WP03 worktree (only WP01 commits are present in this branch's base). This import will raise `ModuleNotFoundError` in any context where WP02 hasn't already been merged.
+
+The WP03 frontmatter declares `dependencies: [WP01]` only — WP02 is a missing dependency declaration.
+
+**Fix**: Rebase the WP03 branch onto the WP02 branch (which is now `done`):
+
+```bash
+cd .worktrees/001-network-device-inventory-cli-WP03
+git rebase 001-network-device-inventory-cli-WP02
+```
+
+After rebase, `models/device.py` will be available in the worktree and the import will resolve correctly. No code changes are needed — the implementation is correct.
+
+**All other deliverables are correct:**
+- `connection.py` — pool with `sys.exit(1)` on `mariadb.Error`, singleton, `pool_size = max_threads + 2`
+- `queries.py` — `ON DUPLICATE KEY UPDATE` with `IF(VALUES(status) = 'success', ...)` preserving `last_success`, `VARBINARY → bytes` coercion
+- `db/__init__.py` — exports all 4 public functions
+
 
 ## Objectives & Success Criteria
 
@@ -311,3 +341,4 @@ __all__ = [
 - 2026-03-12T15:10:57Z – claude-sonnet-4-6 – shell_pid=47833 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T01:02:02Z – claude-sonnet-4-6 – shell_pid=47833 – lane=for_review – T008-T010 complete: connection pool with sys.exit(1) on DB failure, load_enabled_devices (enabled=1 filter, VARBINARY→bytes), upsert_inventory_record (ON DUPLICATE KEY UPDATE with IF() to preserve last_success on failure/timeout), db/__init__.py public API
 - 2026-03-16T14:44:18Z – claude-sonnet-4-6 – shell_pid=20703 – lane=doing – Started review via workflow command
+- 2026-03-16T14:46:16Z – claude-sonnet-4-6 – shell_pid=20703 – lane=planned – Moved to planned
