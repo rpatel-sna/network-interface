@@ -1,7 +1,7 @@
 ---
 work_package_id: WP02
 title: Foundation Utilities & Models
-lane: "doing"
+lane: "planned"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -16,8 +16,9 @@ phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "19430"
-review_status: ''
-reviewed_by: ''
+review_status: "has_feedback"
+reviewed_by: "rpatel-hk"
+review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP02.md"
 history:
 - timestamp: '2026-03-12T10:45:33Z'
   lane: planned
@@ -43,9 +44,76 @@ requirement_refs:
 
 ## Review Feedback
 
-*[Empty initially. Reviewers populate this section if work is returned.]*
+**Reviewed by**: rpatel-hk
+**Status**: ❌ Changes Requested
+**Date**: 2026-03-16
+**Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP02.md`
 
----
+## Review Feedback
+
+**Issue: `configure_logging()` ignores `settings` — uses hardcoded parameter defaults instead**
+
+The spec requires `logger.py` to import `settings` at module level and call `settings.log_file` / `settings.log_level` inside `configure_logging()` (no parameters):
+
+```python
+# Spec (required):
+from network_inventory.config import settings
+
+def configure_logging() -> None:
+    ...
+    level = getattr(logging, settings.log_level.upper(), logging.INFO)
+    file_handler = RotatingFileHandler(settings.log_file, ...)
+```
+
+The implementation instead defines:
+
+```python
+# Implementation (incorrect):
+def configure_logging(log_file: str = "inventory.log", log_level: str = "INFO") -> None:
+```
+
+**Why this matters**: Any caller that does `configure_logging()` with no arguments will silently use the hardcoded defaults `"inventory.log"` / `"INFO"` — completely bypassing whatever the operator set in `.env` (`LOG_FILE`, `LOG_LEVEL`). The spec's design intent is that the logger automatically picks up the configured values without the caller needing to pass them.
+
+**Fix**: Match the spec's signature exactly:
+
+```python
+from network_inventory.config import settings
+
+def configure_logging() -> None:
+    """Set up root logger handlers. Call once at application startup."""
+    global _configured
+    if _configured:
+        return
+    _configured = True
+
+    level = getattr(logging, settings.log_level.upper(), logging.INFO)
+
+    root = logging.getLogger()
+    root.setLevel(level)
+
+    file_handler = RotatingFileHandler(
+        settings.log_file,
+        maxBytes=10 * 1024 * 1024,
+        backupCount=5,
+        encoding="utf-8",
+    )
+    file_handler.setLevel(level)
+    file_handler.setFormatter(logging.Formatter(_LOG_FORMAT, datefmt=_DATE_FORMAT))
+
+    stdout_handler = logging.StreamHandler(sys.stdout)
+    stdout_handler.setLevel(level)
+    stdout_handler.setFormatter(logging.Formatter(_LOG_FORMAT, datefmt=_DATE_FORMAT))
+
+    root.addHandler(file_handler)
+    root.addHandler(stdout_handler)
+```
+
+All other deliverables are correct:
+- `device.py` — `Device` and `CollectionResult` match spec exactly, `password: bytes`
+- `encryption.py` — `load_key()`, `decrypt_password()`, security warning, `InvalidToken` re-exported
+- `error_handler.py` — all three classify branches correct, pre-install fallback stubs present
+- `models/__init__.py` — exports both dataclasses
+
 
 ## Objectives & Success Criteria
 
@@ -374,3 +442,4 @@ def classify_exception(exc: Exception) -> tuple[StatusType, str]:
 - 2026-03-12T15:00:54Z – claude-sonnet-4-6 – shell_pid=46671 – lane=doing – Assigned agent via workflow command
 - 2026-03-12T15:06:42Z – claude-sonnet-4-6 – shell_pid=46671 – lane=for_review – T004-T007 complete: Device+CollectionResult dataclasses, load_key+decrypt_password (Fernet), configure_logging+get_logger (RotatingFileHandler+stdout), classify_exception (timeout/auth/generic)
 - 2026-03-16T14:36:51Z – claude-sonnet-4-6 – shell_pid=19430 – lane=doing – Started review via workflow command
+- 2026-03-16T14:38:32Z – claude-sonnet-4-6 – shell_pid=19430 – lane=planned – Moved to planned
