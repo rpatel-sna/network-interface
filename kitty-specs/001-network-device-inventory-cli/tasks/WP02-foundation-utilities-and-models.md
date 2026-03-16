@@ -1,7 +1,7 @@
 ---
 work_package_id: WP02
 title: Foundation Utilities & Models
-lane: "doing"
+lane: "for_review"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -444,3 +444,4 @@ def classify_exception(exc: Exception) -> tuple[StatusType, str]:
 - 2026-03-16T14:36:51Z – claude-sonnet-4-6 – shell_pid=19430 – lane=doing – Started review via workflow command
 - 2026-03-16T14:38:32Z – claude-sonnet-4-6 – shell_pid=19430 – lane=planned – Moved to planned
 - 2026-03-16T14:42:57Z – claude-sonnet-4-6 – shell_pid=20252 – lane=doing – Started implementation via workflow command
+- 2026-03-16T14:43:25Z – claude-sonnet-4-6 – shell_pid=20252 – lane=for_review – Ready for review: configure_logging now reads from settings singleton (settings.log_file, settings.log_level)
