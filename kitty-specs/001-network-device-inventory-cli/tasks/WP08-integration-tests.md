@@ -1,7 +1,7 @@
 ---
 work_package_id: WP08
 title: Integration Tests
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP07
 base_branch: 001-network-device-inventory-cli-WP07
@@ -14,7 +14,7 @@ subtasks:
 phase: Phase 2 - Integration
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "82440"
+shell_pid: "30448"
 review_status: ''
 reviewed_by: ''
 history:
@@ -616,3 +616,4 @@ pytest tests/integration/ -v -m "real_device"
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
 - 2026-03-13T16:41:32Z – claude-sonnet-4-6 – shell_pid=82440 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T17:03:59Z – claude-sonnet-4-6 – shell_pid=82440 – lane=for_review – T024-T026 complete: conftest with session-scoped DB conn + Fernet key + device seeding + autouse clean_device_inventory; test_db: upsert correctness (last_success preservation on fail/timeout, partial null fields, duplicate prevention), DB connection failure exit; test_full_run: US1 summary format, US3 disabled exclusion, zero-devices exit 0, startup validation (missing key, missing env var + descriptive error), US2 failed device gets row; test_collectors: all regex parsing from research.md samples, registry completeness (7 types), BaseCollector subclass check, real_device mark + xfail for Ruckus wireless; pytest.ini with real_device marker
+- 2026-03-16T18:49:51Z – claude-sonnet-4-6 – shell_pid=30448 – lane=doing – Started review via workflow command
