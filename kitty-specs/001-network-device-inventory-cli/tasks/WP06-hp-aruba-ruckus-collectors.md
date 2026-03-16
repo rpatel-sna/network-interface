@@ -1,7 +1,7 @@
 ---
 work_package_id: WP06
 title: HP, Aruba & Ruckus Collectors
-lane: "doing"
+lane: "done"
 dependencies:
 - WP04
 base_branch: 001-network-device-inventory-cli-WP04
@@ -490,3 +490,4 @@ class RuckusWirelessCollector(BaseCollector):
 - 2026-03-16T19:32:51Z – claude-sonnet-4-6 – shell_pid=33549 – lane=doing – Started implementation via workflow command
 - 2026-03-16T19:37:05Z – claude-sonnet-4-6 – shell_pid=33549 – lane=for_review – Ready for review: rebased onto WP04 (now includes WP02 in stack) — HP ProCurve, Aruba, Ruckus ICX, and Ruckus Wireless collectors implemented
 - 2026-03-16T19:44:03Z – claude-sonnet-4-6 – shell_pid=34780 – lane=doing – Started review via workflow command
+- 2026-03-16T19:51:27Z – claude-sonnet-4-6 – shell_pid=34780 – lane=done – Review passed: HPProCurveCollector (cached show system info, Serial Number/Software revision regex), ArubaCollector (show system info serial + show version firmware with fallback), RuckusICXCollector (cached show version, Serial #/SW: Version regex), RuckusWirelessCollector (fallback device_type strategy, del plaintext in finally, timeout re-raises immediately, open-item caveat documented)
