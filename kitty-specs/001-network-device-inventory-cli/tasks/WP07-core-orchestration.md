@@ -1,7 +1,7 @@
 ---
 work_package_id: WP07
 title: Core Orchestration
-lane: "doing"
+lane: "for_review"
 dependencies:
 - WP02
 base_branch: 001-network-device-inventory-cli-WP02
@@ -461,3 +461,4 @@ if __name__ == "__main__":
 - 2026-03-16T16:31:26Z – claude-sonnet-4-6 – shell_pid=26684 – lane=doing – Started review via workflow command
 - 2026-03-16T17:48:11Z – claude-sonnet-4-6 – shell_pid=26684 – lane=planned – Moved to planned
 - 2026-03-16T18:52:21Z – claude-sonnet-4-6 – shell_pid=30886 – lane=doing – Started implementation via workflow command
+- 2026-03-16T18:53:25Z – claude-sonnet-4-6 – shell_pid=30886 – lane=for_review – Ready for review: fixed configure_logging() call-site (no args), reverted logger.py and .gitignore regressions from original commit
