@@ -1,7 +1,7 @@
 ---
 work_package_id: WP05
 title: Cisco Collectors
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP04
 base_branch: 001-network-device-inventory-cli-WP04
@@ -13,7 +13,7 @@ subtasks:
 phase: Phase 1 - Collectors
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "58642"
+shell_pid: "25667"
 review_status: ''
 reviewed_by: ''
 history:
@@ -264,3 +264,4 @@ NAME: "Chassis",  DESCR: "Nexus7700 C7706 (6 Slot) Chassis"
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
 - 2026-03-13T01:15:51Z – claude-sonnet-4-6 – shell_pid=58642 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T01:18:21Z – claude-sonnet-4-6 – shell_pid=58642 – lane=for_review – T013-T014 complete: CiscoIOSCollector (SN: regex + Version regex with IOS-XE preamble anchor + fallback), CiscoNXOSCollector (serialnum: + NXOS: version regex), both returning None with DEBUG log on no match
+- 2026-03-16T16:06:44Z – claude-sonnet-4-6 – shell_pid=25667 – lane=doing – Started review via workflow command
