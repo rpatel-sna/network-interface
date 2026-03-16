@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Project Setup & Configuration
-lane: "doing"
+lane: "done"
 dependencies: []
 base_branch: master
 base_commit: 9f285b789553b12b8968d6c778008cfb21489d3e
@@ -382,3 +382,4 @@ LOG_LEVEL=INFO
 - 2026-03-16T14:33:04Z – claude-sonnet-4-6 – shell_pid=18651 – lane=doing – Started implementation via workflow command
 - 2026-03-16T14:33:31Z – claude-sonnet-4-6 – shell_pid=18651 – lane=for_review – Ready for review: replaced real credentials in .env.example with placeholder values
 - 2026-03-16T14:35:53Z – claude-sonnet-4-6 – shell_pid=19242 – lane=doing – Started review via workflow command
+- 2026-03-16T14:36:10Z – claude-sonnet-4-6 – shell_pid=19242 – lane=done – Review passed: all deliverables correct — .gitignore preserves Spec Kitty entries, .env.example uses placeholder values, config.py validates required vars with EnvironmentError, requirements.txt pinned
