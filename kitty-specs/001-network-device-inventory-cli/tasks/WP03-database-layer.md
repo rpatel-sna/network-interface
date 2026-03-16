@@ -1,7 +1,7 @@
 ---
 work_package_id: WP03
 title: Database Layer
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -14,7 +14,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "21096"
+shell_pid: "24083"
 review_status: "has_feedback"
 reviewed_by: "rpatel-hk"
 review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP03.md"
@@ -344,3 +344,4 @@ __all__ = [
 - 2026-03-16T14:46:16Z – claude-sonnet-4-6 – shell_pid=20703 – lane=planned – Moved to planned
 - 2026-03-16T14:46:36Z – claude-sonnet-4-6 – shell_pid=21096 – lane=doing – Started implementation via workflow command
 - 2026-03-16T14:46:53Z – claude-sonnet-4-6 – shell_pid=21096 – lane=for_review – Ready for review: rebased onto WP02 so models/device.py is available; no code changes needed
+- 2026-03-16T15:20:11Z – claude-sonnet-4-6 – shell_pid=24083 – lane=doing – Started review via workflow command
