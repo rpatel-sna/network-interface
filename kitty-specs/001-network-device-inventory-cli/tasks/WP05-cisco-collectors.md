@@ -1,7 +1,7 @@
 ---
 work_package_id: WP05
 title: Cisco Collectors
-lane: "doing"
+lane: "for_review"
 dependencies:
 - WP04
 base_branch: 001-network-device-inventory-cli-WP04
@@ -289,3 +289,4 @@ NAME: "Chassis",  DESCR: "Nexus7700 C7706 (6 Slot) Chassis"
 - 2026-03-16T16:06:44Z – claude-sonnet-4-6 – shell_pid=25667 – lane=doing – Started review via workflow command
 - 2026-03-16T16:25:05Z – claude-sonnet-4-6 – shell_pid=25667 – lane=planned – Moved to planned
 - 2026-03-16T18:53:45Z – claude-sonnet-4-6 – shell_pid=31202 – lane=doing – Started implementation via workflow command
+- 2026-03-16T19:32:47Z – claude-sonnet-4-6 – shell_pid=31202 – lane=for_review – Ready for review: rebased onto WP04 (which now stacks on WP02) — all imports available, Cisco IOS/IOS-XE and NX-OS collectors implemented
