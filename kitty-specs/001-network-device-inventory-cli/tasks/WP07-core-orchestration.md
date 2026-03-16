@@ -1,7 +1,7 @@
 ---
 work_package_id: WP07
 title: Core Orchestration
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP02
 base_branch: 001-network-device-inventory-cli-WP02
@@ -16,7 +16,7 @@ subtasks:
 phase: Phase 2 - Integration
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "78396"
+shell_pid: "26684"
 review_status: ''
 reviewed_by: ''
 history:
@@ -358,3 +358,4 @@ if __name__ == "__main__":
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
 - 2026-03-13T16:00:20Z – claude-sonnet-4-6 – shell_pid=78396 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T16:02:40Z – claude-sonnet-4-6 – shell_pid=78396 – lane=for_review – T019-T023 complete: main() with ordered startup (logging→config→key file→DB pool→device load→dispatch→upsert→summary), ThreadPoolExecutor with future_to_device dict, defensive future.result() guard, per-write DB connection acquire/release in main thread, zero-devices exit 0, summary format matching quickstart.md
+- 2026-03-16T16:31:26Z – claude-sonnet-4-6 – shell_pid=26684 – lane=doing – Started review via workflow command
