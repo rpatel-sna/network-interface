@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Project Setup & Configuration
-lane: "for_review"
+lane: "doing"
 dependencies: []
 base_branch: master
 base_commit: 9f285b789553b12b8968d6c778008cfb21489d3e
@@ -13,7 +13,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "18651"
+shell_pid: "19242"
 review_status: "has_feedback"
 reviewed_by: "rpatel-hk"
 review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP01.md"
@@ -381,3 +381,4 @@ LOG_LEVEL=INFO
 - 2026-03-16T14:31:59Z – claude-sonnet-4-6 – shell_pid=18272 – lane=planned – Moved to planned
 - 2026-03-16T14:33:04Z – claude-sonnet-4-6 – shell_pid=18651 – lane=doing – Started implementation via workflow command
 - 2026-03-16T14:33:31Z – claude-sonnet-4-6 – shell_pid=18651 – lane=for_review – Ready for review: replaced real credentials in .env.example with placeholder values
+- 2026-03-16T14:35:53Z – claude-sonnet-4-6 – shell_pid=19242 – lane=doing – Started review via workflow command
