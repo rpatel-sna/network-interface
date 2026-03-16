@@ -13,3 +13,26 @@
 .github/copilot/
 .kittify/.dashboard
 .kittify/missions/__pycache__/
+
+# Environment files — never commit secrets
+.env
+.env.test
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
