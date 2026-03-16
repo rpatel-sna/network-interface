@@ -42,7 +42,7 @@ def main() -> None:
         print(f"Configuration error: {exc}", file=sys.stderr)
         sys.exit(1)
 
-    configure_logging(log_file=settings.log_file, log_level=settings.log_level)
+    configure_logging()
     logger = get_logger(__name__)
     logger.info("Network Device Inventory CLI starting up")
 
