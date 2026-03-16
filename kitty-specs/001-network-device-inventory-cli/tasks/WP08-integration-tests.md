@@ -1,7 +1,7 @@
 ---
 work_package_id: WP08
 title: Integration Tests
-lane: "doing"
+lane: "done"
 dependencies:
 - WP07
 base_branch: 001-network-device-inventory-cli-WP07
@@ -648,3 +648,4 @@ pytest tests/integration/ -v -m "real_device"
 - 2026-03-16T19:37:17Z – claude-sonnet-4-6 – shell_pid=33979 – lane=doing – Started implementation via workflow command
 - 2026-03-16T19:42:33Z – claude-sonnet-4-6 – shell_pid=33979 – lane=for_review – Ready for review: rebased onto corrected WP07 — integration tests for DB layer, full run US1/US2/US3, per-collector regex parsing, real_device mark for SSH tests, pytest.ini with marker registration
 - 2026-03-16T19:53:03Z – claude-sonnet-4-6 – shell_pid=35321 – lane=doing – Started review via workflow command
+- 2026-03-16T19:57:05Z – claude-sonnet-4-6 – shell_pid=35321 – lane=done – Review passed: conftest with session-scoped DB+key+device seeding+autouse cleanup; test_db covers upsert correctness/last_success/partial nulls/count/enabled filtering/bytes type; test_full_run covers US1/US2/US3/zero-devices/startup-validation with descriptive error check; test_collectors covers all regex patterns with research.md samples, 7-type registry completeness, xfail Ruckus wireless; pytest.ini registers real_device mark
