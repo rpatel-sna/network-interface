@@ -1,7 +1,7 @@
 ---
 work_package_id: WP04
 title: Collector Architecture
-lane: "planned"
+lane: "doing"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -13,7 +13,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "24218"
+shell_pid: "30553"
 review_status: "has_feedback"
 reviewed_by: "rpatel-hk"
 review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP04.md"
@@ -368,3 +368,4 @@ __all__ = ["COLLECTOR_REGISTRY", "get_collector", "BaseCollector"]
 - 2026-03-13T01:05:32Z – claude-sonnet-4-6 – shell_pid=57162 – lane=for_review – T011-T012 complete: BaseCollector abstract class (connect/collect/disconnect template, session_log=None, del plaintext_password), COLLECTOR_REGISTRY with try/except ImportError scaffolding for WP05+WP06, get_collector() with WARNING on unknown type
 - 2026-03-16T15:20:52Z – claude-sonnet-4-6 – shell_pid=24218 – lane=doing – Started review via workflow command
 - 2026-03-16T16:06:01Z – claude-sonnet-4-6 – shell_pid=24218 – lane=planned – Moved to planned
+- 2026-03-16T18:50:59Z – claude-sonnet-4-6 – shell_pid=30553 – lane=doing – Started implementation via workflow command
