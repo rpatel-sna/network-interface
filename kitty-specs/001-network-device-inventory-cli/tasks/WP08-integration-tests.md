@@ -1,7 +1,7 @@
 ---
 work_package_id: WP08
 title: Integration Tests
-lane: "planned"
+lane: "doing"
 dependencies:
 - WP07
 base_branch: 001-network-device-inventory-cli-WP07
@@ -14,7 +14,7 @@ subtasks:
 phase: Phase 2 - Integration
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "30448"
+shell_pid: "33979"
 review_status: "has_feedback"
 reviewed_by: "rpatel-hk"
 review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP08.md"
@@ -645,3 +645,4 @@ pytest tests/integration/ -v -m "real_device"
 - 2026-03-13T17:03:59Z – claude-sonnet-4-6 – shell_pid=82440 – lane=for_review – T024-T026 complete: conftest with session-scoped DB conn + Fernet key + device seeding + autouse clean_device_inventory; test_db: upsert correctness (last_success preservation on fail/timeout, partial null fields, duplicate prevention), DB connection failure exit; test_full_run: US1 summary format, US3 disabled exclusion, zero-devices exit 0, startup validation (missing key, missing env var + descriptive error), US2 failed device gets row; test_collectors: all regex parsing from research.md samples, registry completeness (7 types), BaseCollector subclass check, real_device mark + xfail for Ruckus wireless; pytest.ini with real_device marker
 - 2026-03-16T18:49:51Z – claude-sonnet-4-6 – shell_pid=30448 – lane=doing – Started review via workflow command
 - 2026-03-16T18:50:03Z – claude-sonnet-4-6 – shell_pid=30448 – lane=planned – Moved to planned
+- 2026-03-16T19:37:17Z – claude-sonnet-4-6 – shell_pid=33979 – lane=doing – Started implementation via workflow command
