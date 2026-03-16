@@ -1,7 +1,7 @@
 ---
 work_package_id: WP08
 title: Integration Tests
-lane: "doing"
+lane: "for_review"
 dependencies:
 - WP07
 base_branch: 001-network-device-inventory-cli-WP07
@@ -646,3 +646,4 @@ pytest tests/integration/ -v -m "real_device"
 - 2026-03-16T18:49:51Z – claude-sonnet-4-6 – shell_pid=30448 – lane=doing – Started review via workflow command
 - 2026-03-16T18:50:03Z – claude-sonnet-4-6 – shell_pid=30448 – lane=planned – Moved to planned
 - 2026-03-16T19:37:17Z – claude-sonnet-4-6 – shell_pid=33979 – lane=doing – Started implementation via workflow command
+- 2026-03-16T19:42:33Z – claude-sonnet-4-6 – shell_pid=33979 – lane=for_review – Ready for review: rebased onto corrected WP07 — integration tests for DB layer, full run US1/US2/US3, per-collector regex parsing, real_device mark for SSH tests, pytest.ini with marker registration
