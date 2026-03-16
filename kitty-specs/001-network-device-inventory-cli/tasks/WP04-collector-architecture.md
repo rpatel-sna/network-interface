@@ -1,7 +1,7 @@
 ---
 work_package_id: WP04
 title: Collector Architecture
-lane: "doing"
+lane: "for_review"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -369,3 +369,4 @@ __all__ = ["COLLECTOR_REGISTRY", "get_collector", "BaseCollector"]
 - 2026-03-16T15:20:52Z – claude-sonnet-4-6 – shell_pid=24218 – lane=doing – Started review via workflow command
 - 2026-03-16T16:06:01Z – claude-sonnet-4-6 – shell_pid=24218 – lane=planned – Moved to planned
 - 2026-03-16T18:50:59Z – claude-sonnet-4-6 – shell_pid=30553 – lane=doing – Started implementation via workflow command
+- 2026-03-16T18:52:15Z – claude-sonnet-4-6 – shell_pid=30553 – lane=for_review – Ready for review: rebased onto WP02 so all WP02 imports (models.device, utils.encryption, utils.error_handler) are now in the stack
