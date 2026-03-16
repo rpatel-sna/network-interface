@@ -1,7 +1,7 @@
 ---
 work_package_id: WP05
 title: Cisco Collectors
-lane: "doing"
+lane: "planned"
 dependencies:
 - WP04
 base_branch: 001-network-device-inventory-cli-WP04
@@ -14,8 +14,9 @@ phase: Phase 1 - Collectors
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "25667"
-review_status: ''
-reviewed_by: ''
+review_status: "has_feedback"
+reviewed_by: "rpatel-hk"
+review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP05.md"
 history:
 - timestamp: '2026-03-12T10:45:33Z'
   lane: planned
@@ -37,9 +38,30 @@ requirement_refs:
 
 ## Review Feedback
 
-*[Empty initially.]*
+**Reviewed by**: rpatel-hk
+**Status**: ❌ Changes Requested
+**Date**: 2026-03-16
+**Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP05.md`
 
----
+## Review Feedback
+
+**Issue: Dependency WP04 is not yet `done`**
+
+WP05 declares `dependencies: [WP04]` but WP04 is currently in `planned` — it was returned for changes (needs to rebase onto WP02 so that `models/device.py`, `utils/encryption.py`, and `utils/error_handler.py` are present in its worktree).
+
+WP05 is also transitively affected: because WP04 has not been rebased onto WP02, WP05's branch is also missing all WP02 modules (`models/device.py`, `utils/encryption.py`, `utils/error_handler.py`).
+
+**Action required**:
+1. Wait for WP04 to be fixed (rebased onto WP02) and approved
+2. Then rebase WP05 onto the corrected WP04 branch:
+   ```bash
+   cd .worktrees/001-network-device-inventory-cli-WP05
+   git rebase 001-network-device-inventory-cli-WP04
+   ```
+3. Resubmit WP05 for review
+
+No code changes should be needed in WP05 itself — the implementation was not reviewed in detail, but this is a hard blocker that must be resolved first.
+
 
 ## Objectives & Success Criteria
 
@@ -265,3 +287,4 @@ NAME: "Chassis",  DESCR: "Nexus7700 C7706 (6 Slot) Chassis"
 - 2026-03-13T01:15:51Z – claude-sonnet-4-6 – shell_pid=58642 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T01:18:21Z – claude-sonnet-4-6 – shell_pid=58642 – lane=for_review – T013-T014 complete: CiscoIOSCollector (SN: regex + Version regex with IOS-XE preamble anchor + fallback), CiscoNXOSCollector (serialnum: + NXOS: version regex), both returning None with DEBUG log on no match
 - 2026-03-16T16:06:44Z – claude-sonnet-4-6 – shell_pid=25667 – lane=doing – Started review via workflow command
+- 2026-03-16T16:25:05Z – claude-sonnet-4-6 – shell_pid=25667 – lane=planned – Moved to planned
