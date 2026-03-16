@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Project Setup & Configuration
-lane: "doing"
+lane: "for_review"
 dependencies: []
 base_branch: master
 base_commit: 9f285b789553b12b8968d6c778008cfb21489d3e
@@ -341,3 +341,4 @@ LOG_LEVEL=INFO
 - 2026-03-16T14:26:33Z – claude-sonnet-4-6 – shell_pid=17424 – lane=doing – Started review via workflow command
 - 2026-03-16T14:28:23Z – claude-sonnet-4-6 – shell_pid=17424 – lane=planned – Moved to planned
 - 2026-03-16T14:30:03Z – claude-sonnet-4-6 – shell_pid=17977 – lane=doing – Started implementation via workflow command
+- 2026-03-16T14:30:45Z – claude-sonnet-4-6 – shell_pid=17977 – lane=for_review – Ready for review: fixed .gitignore to preserve Spec Kitty managed entries alongside Python-specific additions
