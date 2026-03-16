@@ -1,7 +1,7 @@
 ---
 work_package_id: WP07
 title: Core Orchestration
-lane: "doing"
+lane: "done"
 dependencies:
 - WP02
 base_branch: 001-network-device-inventory-cli-WP02
@@ -463,3 +463,4 @@ if __name__ == "__main__":
 - 2026-03-16T18:52:21Z – claude-sonnet-4-6 – shell_pid=30886 – lane=doing – Started implementation via workflow command
 - 2026-03-16T18:53:25Z – claude-sonnet-4-6 – shell_pid=30886 – lane=for_review – Ready for review: fixed configure_logging() call-site (no args), reverted logger.py and .gitignore regressions from original commit
 - 2026-03-16T19:51:31Z – claude-sonnet-4-6 – shell_pid=35191 – lane=doing – Started review via workflow command
+- 2026-03-16T19:53:00Z – claude-sonnet-4-6 – shell_pid=35191 – lane=done – Review passed: ordered startup (settings→configure_logging()→key→pool→devices→dispatch→upsert→summary), ThreadPoolExecutor with future_to_device dict, defensive future.result() guard, per-write DB connection in main thread, zero-devices exit 0, summary format matches quickstart.md
