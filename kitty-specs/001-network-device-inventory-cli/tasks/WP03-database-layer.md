@@ -1,7 +1,7 @@
 ---
 work_package_id: WP03
 title: Database Layer
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -14,7 +14,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "47833"
+shell_pid: "20703"
 review_status: ''
 reviewed_by: ''
 history:
@@ -310,3 +310,4 @@ __all__ = [
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
 - 2026-03-12T15:10:57Z – claude-sonnet-4-6 – shell_pid=47833 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T01:02:02Z – claude-sonnet-4-6 – shell_pid=47833 – lane=for_review – T008-T010 complete: connection pool with sys.exit(1) on DB failure, load_enabled_devices (enabled=1 filter, VARBINARY→bytes), upsert_inventory_record (ON DUPLICATE KEY UPDATE with IF() to preserve last_success on failure/timeout), db/__init__.py public API
+- 2026-03-16T14:44:18Z – claude-sonnet-4-6 – shell_pid=20703 – lane=doing – Started review via workflow command
