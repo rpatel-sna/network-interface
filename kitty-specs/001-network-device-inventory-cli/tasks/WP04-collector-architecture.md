@@ -1,7 +1,7 @@
 ---
 work_package_id: WP04
 title: Collector Architecture
-lane: "doing"
+lane: "done"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -371,3 +371,4 @@ __all__ = ["COLLECTOR_REGISTRY", "get_collector", "BaseCollector"]
 - 2026-03-16T18:50:59Z – claude-sonnet-4-6 – shell_pid=30553 – lane=doing – Started implementation via workflow command
 - 2026-03-16T18:52:15Z – claude-sonnet-4-6 – shell_pid=30553 – lane=for_review – Ready for review: rebased onto WP02 so all WP02 imports (models.device, utils.encryption, utils.error_handler) are now in the stack
 - 2026-03-16T19:42:53Z – claude-sonnet-4-6 – shell_pid=34522 – lane=doing – Started review via workflow command
+- 2026-03-16T19:43:22Z – claude-sonnet-4-6 – shell_pid=34522 – lane=done – Review passed: BaseCollector with session_log=None, del plaintext_password, _disconnect() in finally, collect() never raises; COLLECTOR_REGISTRY with try/except ImportError scaffolding, get_collector() with WARNING on unknown type; FR-014 extension comment accurate; rebased correctly onto WP02
