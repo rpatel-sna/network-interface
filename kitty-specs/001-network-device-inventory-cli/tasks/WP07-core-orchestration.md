@@ -1,7 +1,7 @@
 ---
 work_package_id: WP07
 title: Core Orchestration
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP02
 base_branch: 001-network-device-inventory-cli-WP02
@@ -16,7 +16,7 @@ subtasks:
 phase: Phase 2 - Integration
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "30886"
+shell_pid: "35191"
 review_status: "has_feedback"
 reviewed_by: "rpatel-hk"
 review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP07.md"
@@ -462,3 +462,4 @@ if __name__ == "__main__":
 - 2026-03-16T17:48:11Z – claude-sonnet-4-6 – shell_pid=26684 – lane=planned – Moved to planned
 - 2026-03-16T18:52:21Z – claude-sonnet-4-6 – shell_pid=30886 – lane=doing – Started implementation via workflow command
 - 2026-03-16T18:53:25Z – claude-sonnet-4-6 – shell_pid=30886 – lane=for_review – Ready for review: fixed configure_logging() call-site (no args), reverted logger.py and .gitignore regressions from original commit
+- 2026-03-16T19:51:31Z – claude-sonnet-4-6 – shell_pid=35191 – lane=doing – Started review via workflow command
