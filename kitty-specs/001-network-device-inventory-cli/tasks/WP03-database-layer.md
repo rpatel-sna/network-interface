@@ -1,7 +1,7 @@
 ---
 work_package_id: WP03
 title: Database Layer
-lane: "doing"
+lane: "done"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -345,3 +345,4 @@ __all__ = [
 - 2026-03-16T14:46:36Z – claude-sonnet-4-6 – shell_pid=21096 – lane=doing – Started implementation via workflow command
 - 2026-03-16T14:46:53Z – claude-sonnet-4-6 – shell_pid=21096 – lane=for_review – Ready for review: rebased onto WP02 so models/device.py is available; no code changes needed
 - 2026-03-16T15:20:11Z – claude-sonnet-4-6 – shell_pid=24083 – lane=doing – Started review via workflow command
+- 2026-03-16T15:20:33Z – claude-sonnet-4-6 – shell_pid=24083 – lane=done – Review passed: rebased onto WP02 (models/device.py now present), connection pool with sys.exit(1) on DB failure, correct ON DUPLICATE KEY UPDATE with IF() for last_success preservation, VARBINARY→bytes coercion
