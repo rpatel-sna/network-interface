@@ -1,7 +1,7 @@
 ---
 work_package_id: WP06
 title: HP, Aruba & Ruckus Collectors
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP04
 base_branch: 001-network-device-inventory-cli-WP04
@@ -15,7 +15,7 @@ subtasks:
 phase: Phase 1 - Collectors
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "59427"
+shell_pid: "26260"
 review_status: ''
 reviewed_by: ''
 history:
@@ -458,3 +458,4 @@ class RuckusWirelessCollector(BaseCollector):
 - 2026-03-12T10:45:33Z – system – lane=planned – Prompt created.
 - 2026-03-13T01:19:58Z – claude-sonnet-4-6 – shell_pid=59427 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T01:21:26Z – claude-sonnet-4-6 – shell_pid=59427 – lane=for_review – T015-T018 complete: HPProCurveCollector (cached show system info), ArubaCollector (show system info + show version with fallback pattern), RuckusICXCollector (cached show version), RuckusWirelessCollector (device_type fallback: configured→linux→generic_termserver, timeout re-raises immediately, plaintext del in finally)
+- 2026-03-16T16:25:40Z – claude-sonnet-4-6 – shell_pid=26260 – lane=doing – Started review via workflow command
