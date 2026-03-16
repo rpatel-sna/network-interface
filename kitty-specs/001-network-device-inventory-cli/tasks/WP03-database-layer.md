@@ -1,7 +1,7 @@
 ---
 work_package_id: WP03
 title: Database Layer
-lane: "doing"
+lane: "for_review"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -343,3 +343,4 @@ __all__ = [
 - 2026-03-16T14:44:18Z – claude-sonnet-4-6 – shell_pid=20703 – lane=doing – Started review via workflow command
 - 2026-03-16T14:46:16Z – claude-sonnet-4-6 – shell_pid=20703 – lane=planned – Moved to planned
 - 2026-03-16T14:46:36Z – claude-sonnet-4-6 – shell_pid=21096 – lane=doing – Started implementation via workflow command
+- 2026-03-16T14:46:53Z – claude-sonnet-4-6 – shell_pid=21096 – lane=for_review – Ready for review: rebased onto WP02 so models/device.py is available; no code changes needed
