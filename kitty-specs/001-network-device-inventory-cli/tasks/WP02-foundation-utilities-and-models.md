@@ -1,7 +1,7 @@
 ---
 work_package_id: WP02
 title: Foundation Utilities & Models
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP01
 base_branch: 001-network-device-inventory-cli-WP01
@@ -15,7 +15,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "20252"
+shell_pid: "20514"
 review_status: "has_feedback"
 reviewed_by: "rpatel-hk"
 review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP02.md"
@@ -445,3 +445,4 @@ def classify_exception(exc: Exception) -> tuple[StatusType, str]:
 - 2026-03-16T14:38:32Z – claude-sonnet-4-6 – shell_pid=19430 – lane=planned – Moved to planned
 - 2026-03-16T14:42:57Z – claude-sonnet-4-6 – shell_pid=20252 – lane=doing – Started implementation via workflow command
 - 2026-03-16T14:43:25Z – claude-sonnet-4-6 – shell_pid=20252 – lane=for_review – Ready for review: configure_logging now reads from settings singleton (settings.log_file, settings.log_level)
+- 2026-03-16T14:43:37Z – claude-sonnet-4-6 – shell_pid=20514 – lane=doing – Started review via workflow command
