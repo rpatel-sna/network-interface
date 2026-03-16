@@ -1,7 +1,7 @@
 ---
 work_package_id: WP08
 title: Integration Tests
-lane: "doing"
+lane: "planned"
 dependencies:
 - WP07
 base_branch: 001-network-device-inventory-cli-WP07
@@ -15,8 +15,9 @@ phase: Phase 2 - Integration
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "30448"
-review_status: ''
-reviewed_by: ''
+review_status: "has_feedback"
+reviewed_by: "rpatel-hk"
+review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP08.md"
 history:
 - timestamp: '2026-03-12T10:45:33Z'
   lane: planned
@@ -42,9 +43,35 @@ requirement_refs:
 
 ## Review Feedback
 
-*[Empty initially.]*
+**Reviewed by**: rpatel-hk
+**Status**: ❌ Changes Requested
+**Date**: 2026-03-16
+**Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP08.md`
 
----
+# Review Feedback: WP08 — REJECTED (Dependency Blocker)
+
+## Blocker: WP07 is not `done`
+
+WP08 declares `WP07` as a dependency and its branch stacks directly on
+`001-network-device-inventory-cli-WP07`. WP07 is currently in `lane: "planned"`
+after being rejected for changes.
+
+Review cannot proceed until WP07 is fixed, re-submitted, and approved.
+
+## Required Actions
+
+1. Wait for WP07 to be implemented, reviewed, and moved to `done`.
+2. Once WP07 is `done`, rebase this branch onto it:
+   ```
+   cd .worktrees/001-network-device-inventory-cli-WP08
+   git rebase 001-network-device-inventory-cli-WP07
+   ```
+3. Re-submit WP08 for review.
+
+No code changes are required at this time — the stacking is already correct
+(base branch is `WP07`). The rebase step will fast-forward once WP07 has its
+corrected commits in place.
+
 
 ## Objectives & Success Criteria
 
@@ -617,3 +644,4 @@ pytest tests/integration/ -v -m "real_device"
 - 2026-03-13T16:41:32Z – claude-sonnet-4-6 – shell_pid=82440 – lane=doing – Assigned agent via workflow command
 - 2026-03-13T17:03:59Z – claude-sonnet-4-6 – shell_pid=82440 – lane=for_review – T024-T026 complete: conftest with session-scoped DB conn + Fernet key + device seeding + autouse clean_device_inventory; test_db: upsert correctness (last_success preservation on fail/timeout, partial null fields, duplicate prevention), DB connection failure exit; test_full_run: US1 summary format, US3 disabled exclusion, zero-devices exit 0, startup validation (missing key, missing env var + descriptive error), US2 failed device gets row; test_collectors: all regex parsing from research.md samples, registry completeness (7 types), BaseCollector subclass check, real_device mark + xfail for Ruckus wireless; pytest.ini with real_device marker
 - 2026-03-16T18:49:51Z – claude-sonnet-4-6 – shell_pid=30448 – lane=doing – Started review via workflow command
+- 2026-03-16T18:50:03Z – claude-sonnet-4-6 – shell_pid=30448 – lane=planned – Moved to planned
