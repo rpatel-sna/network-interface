@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Project Setup & Configuration
-lane: "doing"
+lane: "planned"
 dependencies: []
 base_branch: master
 base_commit: 9f285b789553b12b8968d6c778008cfb21489d3e
@@ -14,8 +14,9 @@ phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "17424"
-review_status: ''
-reviewed_by: ''
+review_status: "has_feedback"
+reviewed_by: "rpatel-hk"
+review_feedback_file: "/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP01.md"
 history:
 - timestamp: '2026-03-12T10:45:33Z'
   lane: planned
@@ -43,9 +44,82 @@ requirement_refs:
 
 ## Review Feedback
 
-*[This section is empty initially. Reviewers will populate it if the work is returned from review.]*
+**Reviewed by**: rpatel-hk
+**Status**: ❌ Changes Requested
+**Date**: 2026-03-16
+**Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP01.md`
 
----
+## Review Feedback
+
+**Issue: `.gitignore` was fully replaced instead of extended**
+
+The WP01 commit replaced the entire `.gitignore` with Python-specific entries, removing all Spec Kitty CLI-managed entries that existed on master:
+
+```
+# Removed entries (from master):
+.claude/
+.codex/
+.opencode/
+.windsurf/
+.gemini/
+.cursor/
+.qwen/
+.kilocode/
+.augment/
+.roo/
+.amazonq/
+.github/copilot/
+.kittify/.dashboard
+.kittify/missions/__pycache__/
+```
+
+When this WP merges to master, those directories will no longer be gitignored, risking accidental commits of AI tooling config and spec-kitty internal files.
+
+**Fix**: Merge both sets of entries — preserve the existing Spec Kitty-managed lines and append the Python-specific additions below them. The final `.gitignore` should contain both sections:
+
+```gitignore
+# Added by Spec Kitty CLI (auto-managed)
+.claude/
+.codex/
+.opencode/
+.windsurf/
+.gemini/
+.cursor/
+.qwen/
+.kilocode/
+.augment/
+.roo/
+.amazonq/
+.github/copilot/
+.kittify/.dashboard
+.kittify/missions/__pycache__/
+
+# Environment files — never commit secrets
+.env
+.env.test
+*.key
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+
+# Logs
+*.log
+
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+```
+
+All other deliverables (directory structure, `config.py`, `.env.example`, `requirements.txt`) are correct and match the spec exactly.
+
 
 ## Objectives & Success Criteria
 
@@ -265,3 +339,4 @@ LOG_LEVEL=INFO
 - 2026-03-12T14:40:00Z – claude-sonnet-4-6 – shell_pid=44718 – lane=doing – Assigned agent via workflow command
 - 2026-03-12T14:43:35Z – claude-sonnet-4-6 – shell_pid=44718 – lane=for_review – T001-T003 complete: directory structure, config.py with EnvironmentError validation, .env.example, requirements.txt, .gitignore all committed
 - 2026-03-16T14:26:33Z – claude-sonnet-4-6 – shell_pid=17424 – lane=doing – Started review via workflow command
+- 2026-03-16T14:28:23Z – claude-sonnet-4-6 – shell_pid=17424 – lane=planned – Moved to planned
