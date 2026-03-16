@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Project Setup & Configuration
-lane: "doing"
+lane: "planned"
 dependencies: []
 base_branch: master
 base_commit: 9f285b789553b12b8968d6c778008cfb21489d3e
@@ -48,6 +48,41 @@ requirement_refs:
 **Status**: ❌ Changes Requested
 **Date**: 2026-03-16
 **Feedback file**: `/private/var/folders/9q/_tbpgj3j6k5b3_6wcw8y8rpw0000gp/T/spec-kitty-review-feedback-WP01.md`
+
+## Review Feedback
+
+**Issue: `.env.example` contains real credentials instead of placeholder values**
+
+The `.env.example` file was committed with what appear to be real database credentials:
+
+```
+DB_HOST=snapx-us1.safetynetaccess.com
+DB_PORT=33062
+DB_USER=domo-com
+DB_PASSWORD=sQRqqygoLm
+DB_NAME=snapx
+```
+
+`.env.example` is a template file committed to version control — it must only contain safe placeholder values. Real credentials must never be stored in version control.
+
+**Fix**: Replace with the placeholder values specified in the WP:
+
+```dotenv
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_USER=inventory_user
+DB_PASSWORD=change_me
+DB_NAME=network_inventory
+```
+
+**Action required**: If these are real credentials, rotate them immediately (change the password on the database server), as they may already be exposed in git history.
+
+All other deliverables are correct:
+- `.gitignore` now correctly preserves Spec Kitty managed entries (previous feedback addressed)
+- `config.py` matches spec exactly
+- `requirements.txt` is correct
+- Directory structure with `__init__.py` stubs is complete
+
 
 ## Review Feedback
 
@@ -343,3 +378,4 @@ LOG_LEVEL=INFO
 - 2026-03-16T14:30:03Z – claude-sonnet-4-6 – shell_pid=17977 – lane=doing – Started implementation via workflow command
 - 2026-03-16T14:30:45Z – claude-sonnet-4-6 – shell_pid=17977 – lane=for_review – Ready for review: fixed .gitignore to preserve Spec Kitty managed entries alongside Python-specific additions
 - 2026-03-16T14:31:24Z – claude-sonnet-4-6 – shell_pid=18272 – lane=doing – Started review via workflow command
+- 2026-03-16T14:31:59Z – claude-sonnet-4-6 – shell_pid=18272 – lane=planned – Moved to planned
