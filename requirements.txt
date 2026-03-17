@@ -1,0 +1,5 @@
+# Network Device Inventory CLI — dependencies
+netmiko>=4.3,<5.0
+mariadb>=1.1,<2.0
+cryptography>=42.0,<44.0
+python-dotenv>=1.0,<2.0

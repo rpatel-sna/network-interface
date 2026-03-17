@@ -1,0 +1,11 @@
+{
+  "feature_number": "001",
+  "slug": "001-network-device-inventory-cli",
+  "feature_slug": "001-network-device-inventory-cli",
+  "friendly_name": "Network Device Inventory CLI",
+  "mission": "software-dev",
+  "target_branch": "master",
+  "created_at": "2026-03-12T09:50:01.150241+00:00",
+  "source_description": "On-demand CLI tool to SSH into HP, Aruba, Ruckus, and Cisco network devices and collect serial numbers and firmware versions into a MariaDB database.",
+  "vcs": "git"
+}
