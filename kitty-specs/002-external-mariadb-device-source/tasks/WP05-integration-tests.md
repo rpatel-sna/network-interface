@@ -1,8 +1,11 @@
 ---
 work_package_id: WP05
 title: Integration Tests
-lane: planned
+lane: "doing"
 dependencies: [WP04]
+base_branch: 002-external-mariadb-device-source-WP04
+base_commit: 801c2434b1bc10642e83d2c2a536b9063ebdfddb
+created_at: '2026-03-20T15:41:17.819254+00:00'
 subtasks:
 - T020
 - T021
@@ -10,7 +13,7 @@ subtasks:
 phase: Phase 3 - Verification
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "39492"
 review_status: ''
 reviewed_by: ''
 history:
