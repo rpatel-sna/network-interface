@@ -219,23 +219,21 @@ class TestRealDeviceCiscoIOS:
     """
 
     @pytest.fixture
-    def cisco_ios_device(self, fernet_key):
+    def cisco_ios_device(self):
         import os
-        from cryptography.fernet import Fernet
         from network_inventory.models.device import Device
 
         host = os.environ["TEST_CISCO_IOS_HOST"]
         user = os.environ.get("TEST_CISCO_IOS_USER", "admin")
-        password = os.environ["TEST_CISCO_IOS_PASS"].encode()
-        enc_password = Fernet(fernet_key).encrypt(password)
+        password = os.environ["TEST_CISCO_IOS_PASS"]
 
         return Device(
             id=99, hostname="test-cisco-ios", ip_address=host, ssh_port=22,
-            username=user, password=enc_password, device_type="cisco_ios", enabled=True,
+            username=user, password=password, device_type="cisco_ios", enabled=True,
         )
 
-    def test_collect_returns_success(self, cisco_ios_device, fernet_key):
-        collector = CiscoIOSCollector(device=cisco_ios_device, key=fernet_key)
+    def test_collect_returns_success(self, cisco_ios_device):
+        collector = CiscoIOSCollector(device=cisco_ios_device)
         result = collector.collect()
         assert result.status == 'success'
         assert result.serial_number is not None
@@ -250,24 +248,22 @@ class TestRealDeviceRuckusWireless:
     """
 
     @pytest.fixture
-    def ruckus_wireless_device(self, fernet_key):
+    def ruckus_wireless_device(self):
         import os
-        from cryptography.fernet import Fernet
         from network_inventory.models.device import Device
 
         host = os.environ["TEST_RUCKUS_WIRELESS_HOST"]
         user = os.environ.get("TEST_RUCKUS_WIRELESS_USER", "admin")
-        password = os.environ["TEST_RUCKUS_WIRELESS_PASS"].encode()
-        enc_password = Fernet(fernet_key).encrypt(password)
+        password = os.environ["TEST_RUCKUS_WIRELESS_PASS"]
 
         return Device(
             id=98, hostname="test-ruckus-wireless", ip_address=host, ssh_port=22,
-            username=user, password=enc_password, device_type="ruckus_wireless", enabled=True,
+            username=user, password=password, device_type="ruckus_wireless", enabled=True,
         )
 
-    def test_collect_does_not_raise(self, ruckus_wireless_device, fernet_key):
+    def test_collect_does_not_raise(self, ruckus_wireless_device):
         """collect() returns a CollectionResult regardless of outcome — never raises."""
-        collector = RuckusWirelessCollector(device=ruckus_wireless_device, key=fernet_key)
+        collector = RuckusWirelessCollector(device=ruckus_wireless_device)
         result = collector.collect()
         assert result.status in ('success', 'failed', 'timeout')
         assert result.device_id == ruckus_wireless_device.id

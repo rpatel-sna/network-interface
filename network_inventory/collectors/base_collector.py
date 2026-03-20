@@ -10,7 +10,6 @@ from netmiko.exceptions import NetmikoAuthenticationException, NetmikoTimeoutExc
 
 from network_inventory.config import Settings, settings as default_settings
 from network_inventory.models.device import CollectionResult, Device
-from network_inventory.utils.encryption import decrypt_password
 from network_inventory.utils.error_handler import classify_exception
 
 logger = logging.getLogger(__name__)
@@ -35,31 +34,24 @@ class BaseCollector(ABC):
     def __init__(
         self,
         device: Device,
-        key: bytes,
         app_settings: Settings | None = None,
     ) -> None:
         self.device = device
-        self._key = key                               # Fernet key bytes
         self._settings = app_settings or default_settings
         self.connection: ConnectHandler | None = None
 
     def _connect(self) -> None:
         """Open an SSH session to the device. Sets self.connection."""
-        plaintext_password = decrypt_password(self._key, self.device.password)
-        try:
-            self.connection = ConnectHandler(
-                device_type=self.device.device_type,
-                host=self.device.ip_address,
-                port=self.device.ssh_port,
-                username=self.device.username,
-                password=plaintext_password,
-                timeout=self._settings.ssh_timeout,
-                session_log=None,       # Never log session data (may contain credentials)
-                global_delay_factor=2,  # Slightly generous timing for slow devices
-            )
-        finally:
-            # Remove plaintext from local scope immediately after use
-            del plaintext_password
+        self.connection = ConnectHandler(
+            device_type=self.device.device_type,
+            host=self.device.ip_address,
+            port=self.device.ssh_port,
+            username=self.device.username,
+            password=self.device.password,
+            timeout=self._settings.ssh_timeout,
+            session_log=None,       # Never log session data (may contain credentials)
+            global_delay_factor=2,  # Slightly generous timing for slow devices
+        )
 
     def _disconnect(self) -> None:
         """Close the SSH session if open (best-effort)."""
