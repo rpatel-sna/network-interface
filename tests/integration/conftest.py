@@ -2,20 +2,20 @@
 from __future__ import annotations
 
 import os
-from datetime import datetime
 
 import mariadb
 import pytest
-from cryptography.fernet import Fernet
+
+from network_inventory.config import Settings
 
 
 # ---------------------------------------------------------------------------
-# Database connection
+# Local (results) DB connection
 # ---------------------------------------------------------------------------
 
 @pytest.fixture(scope="session")
 def test_db_conn():
-    """Provide a MariaDB connection to the test database (session-scoped)."""
+    """Provide a MariaDB connection to the test (results) database (session-scoped)."""
     conn = mariadb.connect(
         host=os.environ.get("TEST_DB_HOST", "127.0.0.1"),
         port=int(os.environ.get("TEST_DB_PORT", "3306")),
@@ -28,63 +28,90 @@ def test_db_conn():
 
 
 # ---------------------------------------------------------------------------
-# Fernet key
+# External (device source) DB connection + schema
 # ---------------------------------------------------------------------------
 
 @pytest.fixture(scope="session")
-def fernet_key() -> bytes:
-    """Generate a fresh Fernet key (session-scoped — shared across tests)."""
-    return Fernet.generate_key()
+def external_db_conn():
+    """Provide a MariaDB connection to the test external device source DB.
+
+    Points at the same local MariaDB instance but uses TEST_EXT_DB_NAME
+    (default: test_ext_devices) to simulate an external device source without
+    requiring a separate database server.
+    """
+    conn = mariadb.connect(
+        host=os.environ.get("TEST_DB_HOST", "127.0.0.1"),
+        port=int(os.environ.get("TEST_DB_PORT", "3306")),
+        user=os.environ.get("TEST_DB_USER", "root"),
+        password=os.environ.get("TEST_DB_PASSWORD", ""),
+        database=os.environ.get("TEST_EXT_DB_NAME", "test_ext_devices"),
+    )
+    cur = conn.cursor()
+    cur.execute("""
+        CREATE TABLE IF NOT EXISTS ext_devices (
+            id          INT          PRIMARY KEY AUTO_INCREMENT,
+            ip_address  VARCHAR(45)  NOT NULL,
+            hostname    VARCHAR(255),
+            ssh_port    INT          DEFAULT 22,
+            username    VARCHAR(255) NOT NULL,
+            password    VARCHAR(255) NOT NULL,
+            device_type VARCHAR(100) NOT NULL
+        )
+    """)
+    conn.commit()
+    cur.close()
+    yield conn
+    cur = conn.cursor()
+    cur.execute("DROP TABLE IF EXISTS ext_devices")
+    conn.commit()
+    cur.close()
+    conn.close()
 
 
 @pytest.fixture(scope="session")
-def key_file(tmp_path_factory, fernet_key):
-    """Write the Fernet key to a temp file and return its path."""
-    key_path = tmp_path_factory.mktemp("keys") / "test.key"
-    key_path.write_bytes(fernet_key)
-    return str(key_path)
+def ext_db_settings(external_db_conn):
+    """Settings instance with ext_db_* fields pointing to the test external DB."""
+    return Settings(
+        db_host=os.environ.get("TEST_DB_HOST", "127.0.0.1"),
+        db_port=int(os.environ.get("TEST_DB_PORT", "3306")),
+        db_user=os.environ.get("TEST_DB_USER", "root"),
+        db_password=os.environ.get("TEST_DB_PASSWORD", ""),
+        db_name=os.environ.get("TEST_DB_NAME", "test_inventory"),
+        ext_db_host=os.environ.get("TEST_DB_HOST", "127.0.0.1"),
+        ext_db_port=int(os.environ.get("TEST_DB_PORT", "3306")),
+        ext_db_user=os.environ.get("TEST_DB_USER", "root"),
+        ext_db_password=os.environ.get("TEST_DB_PASSWORD", ""),
+        ext_db_name=os.environ.get("TEST_EXT_DB_NAME", "test_ext_devices"),
+        ext_db_query=(
+            "SELECT id, ip_address, hostname, ssh_port, username, "
+            "password, device_type FROM ext_devices"
+        ),
+    )
 
 
 # ---------------------------------------------------------------------------
-# Test device seeding
+# Seed external DB with a default test device (used by full-run tests)
 # ---------------------------------------------------------------------------
 
 @pytest.fixture(scope="session", autouse=True)
-def seed_test_devices(test_db_conn, fernet_key):
-    """Insert test devices used across the integration suite.
+def seed_ext_test_devices(external_db_conn):
+    """Insert a test device into ext_devices for use by full-run subprocess tests.
 
-    Device 1: enabled=1  (will be polled)
-    Device 2: enabled=0  (must be excluded from polling — US3)
-    Passwords are Fernet-encrypted with the session key.
+    Device uses a non-routable IP (192.0.2.1) so SSH always fails — the tool
+    still writes an inventory row with status=failed, which is what we assert.
     """
-    from cryptography.fernet import Fernet as F
-    enc_password = F(fernet_key).encrypt(b"test_password")
-
-    cur = test_db_conn.cursor()
-
-    # Upsert to be idempotent across test runs
+    cur = external_db_conn.cursor()
     cur.execute("""
-        INSERT INTO devices (id, hostname, ip_address, ssh_port, username, password,
-                             device_type, enabled)
-        VALUES (1, 'test-sw-enabled', '192.0.2.1', 22, 'admin', ?, 'cisco_ios', 1)
+        INSERT INTO ext_devices (id, ip_address, hostname, ssh_port, username,
+                                 password, device_type)
+        VALUES (1, '192.0.2.1', 'test-sw-01', 22, 'admin', 'plaintext_pw', 'cisco_ios')
         ON DUPLICATE KEY UPDATE
-            hostname=VALUES(hostname), ip_address=VALUES(ip_address),
-            password=VALUES(password), enabled=VALUES(enabled)
-    """, (enc_password,))
-
-    cur.execute("""
-        INSERT INTO devices (id, hostname, ip_address, ssh_port, username, password,
-                             device_type, enabled)
-        VALUES (2, 'test-sw-disabled', '192.0.2.2', 22, 'admin', ?, 'cisco_ios', 0)
-        ON DUPLICATE KEY UPDATE
-            hostname=VALUES(hostname), ip_address=VALUES(ip_address),
-            password=VALUES(password), enabled=VALUES(enabled)
-    """, (enc_password,))
-
-    test_db_conn.commit()
+            ip_address=VALUES(ip_address), hostname=VALUES(hostname),
+            password=VALUES(password)
+    """)
+    external_db_conn.commit()
     cur.close()
     yield
-    # Leave devices in DB — truncated by clean_device_inventory between tests
 
 
 # ---------------------------------------------------------------------------
