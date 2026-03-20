@@ -81,10 +81,10 @@
 **Estimated size**: ~220 lines
 
 ### Included Subtasks
-- [ ] T011 Delete `network_inventory/utils/encryption.py` entirely
-- [ ] T012 Remove `load_enabled_devices()` function and `_LOAD_ENABLED_DEVICES_SQL` constant from `network_inventory/db/queries.py`
-- [ ] T013 Remove `load_enabled_devices` from imports and exports in `network_inventory/db/__init__.py`
-- [ ] T014 [P] Check `requirements.txt` — remove `cryptography` package if `encryption.py` was its only consumer
+- [x] T011 Delete `network_inventory/utils/encryption.py` entirely
+- [x] T012 Remove `load_enabled_devices()` function and `_LOAD_ENABLED_DEVICES_SQL` constant from `network_inventory/db/queries.py`
+- [x] T013 Remove `load_enabled_devices` from imports and exports in `network_inventory/db/__init__.py`
+- [x] T014 [P] Check `requirements.txt` — remove `cryptography` package if `encryption.py` was its only consumer
 
 ### Implementation Notes
 - `upsert_inventory_record()` in `queries.py` is unchanged — leave it intact.
