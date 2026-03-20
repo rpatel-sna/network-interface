@@ -1,7 +1,7 @@
 ---
 work_package_id: WP03
 title: Remove Encryption and Trim DB Layer
-lane: "for_review"
+lane: "doing"
 dependencies: [WP01]
 base_branch: 002-external-mariadb-device-source-WP01
 base_commit: 8609129f96a6b9bc1e3511b00d861285a304854c
@@ -14,7 +14,7 @@ subtasks:
 phase: Phase 1 - Core Implementation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "37075"
+shell_pid: "42731"
 review_status: ''
 reviewed_by: ''
 history:
@@ -169,3 +169,4 @@ Reviewer checks:
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
 - 2026-03-20T15:32:44Z – claude-sonnet-4-6 – shell_pid=37075 – lane=doing – Assigned agent via workflow command
 - 2026-03-20T15:35:15Z – claude-sonnet-4-6 – shell_pid=37075 – lane=for_review – Ready for review: encryption.py deleted, load_enabled_devices removed from queries.py and db/__init__.py; cryptography retained in requirements.txt (integration tests import it directly); ruckus_wireless.py also imports decrypt_password — flagged for WP04
+- 2026-03-20T15:54:04Z – claude-sonnet-4-6 – shell_pid=42731 – lane=doing – Started review via workflow command
