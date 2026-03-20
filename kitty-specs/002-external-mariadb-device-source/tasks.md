@@ -112,11 +112,11 @@
 **Estimated size**: ~350 lines
 
 ### Included Subtasks
-- [ ] T015 Remove `key: bytes` parameter from `BaseCollector.__init__()` in `network_inventory/collectors/base_collector.py`; remove `self._key` attribute
-- [ ] T016 Remove `decrypt_password()` import and call from `BaseCollector._connect()`; use `self.device.password` directly as the `password` arg to `ConnectHandler`
-- [ ] T017 Remove Step 2 (Fernet key load) from `network_inventory/main.py` — remove `load_key()` import, key validation block, and `sys.exit(1)` on key error
-- [ ] T018 Replace Step 4 (`load_enabled_devices(conn)`) with `load_devices_from_external_db(settings)` in `main.py`; update imports; remove now-unused `get_connection()` call at step 4
-- [ ] T019 Remove `key=key` from collector instantiation in `main.py` (`collector_class(device=device, key=key)` → `collector_class(device=device)`)
+- [x] T015 Remove `key: bytes` parameter from `BaseCollector.__init__()` in `network_inventory/collectors/base_collector.py`; remove `self._key` attribute
+- [x] T016 Remove `decrypt_password()` import and call from `BaseCollector._connect()`; use `self.device.password` directly as the `password` arg to `ConnectHandler`
+- [x] T017 Remove Step 2 (Fernet key load) from `network_inventory/main.py` — remove `load_key()` import, key validation block, and `sys.exit(1)` on key error
+- [x] T018 Replace Step 4 (`load_enabled_devices(conn)`) with `load_devices_from_external_db(settings)` in `main.py`; update imports; remove now-unused `get_connection()` call at step 4
+- [x] T019 Remove `key=key` from collector instantiation in `main.py` (`collector_class(device=device, key=key)` → `collector_class(device=device)`)
 
 ### Implementation Notes
 - In `main.py`, the local MariaDB pool (`get_pool()`) is still needed for result writes (step 3 stays).
