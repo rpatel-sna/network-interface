@@ -12,7 +12,7 @@ subtasks:
 - T022
 phase: Phase 3 - Verification
 assignee: ''
-agent: ''
+agent: "claude-sonnet-4-6"
 shell_pid: "39492"
 review_status: ''
 reviewed_by: ''
@@ -276,3 +276,4 @@ Reviewer checks:
 ## Activity Log
 
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
+- 2026-03-20T15:41:18Z – claude-sonnet-4-6 – shell_pid=39492 – lane=doing – Assigned agent via workflow command
