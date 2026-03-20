@@ -14,7 +14,7 @@ subtasks:
 - T010
 phase: Phase 1 - Core Implementation
 assignee: ''
-agent: ''
+agent: "claude-sonnet-4-6"
 shell_pid: "30738"
 review_status: ''
 reviewed_by: ''
@@ -304,3 +304,4 @@ Reviewer checks:
 ## Activity Log
 
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
+- 2026-03-20T15:01:40Z – claude-sonnet-4-6 – shell_pid=30738 – lane=doing – Assigned agent via workflow command
