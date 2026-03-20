@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Config & Model Changes
-lane: "doing"
+lane: "done"
 dependencies: []
 base_branch: master
 base_commit: 78c19143c79ae7bba90daa1ded5150e618a8332d
@@ -16,8 +16,8 @@ phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "42186"
-review_status: ''
-reviewed_by: ''
+review_status: "approved"
+reviewed_by: "rpatel-hk"
 history:
 - timestamp: '2026-03-20T14:42:47Z'
   lane: planned
@@ -223,3 +223,4 @@ Reviewer should verify:
 - 2026-03-20T14:56:56Z – claude-sonnet-4-6 – shell_pid=29528 – lane=doing – Assigned agent via workflow command
 - 2026-03-20T14:57:50Z – claude-sonnet-4-6 – shell_pid=29528 – lane=for_review – Ready for review: config.py (EXT_DB_* fields, no encryption_key_file), Device.password str, .env.example updated
 - 2026-03-20T15:52:32Z – claude-sonnet-4-6 – shell_pid=42186 – lane=doing – Started review via workflow command
+- 2026-03-20T15:53:15Z – claude-sonnet-4-6 – shell_pid=42186 – lane=done – Review passed: EXT_DB_* config fields correct with 3306 default for port; Device.password correctly changed to str; _load_settings() validates 9 required vars; .env.example well-documented with example query
