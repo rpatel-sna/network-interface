@@ -1,8 +1,11 @@
 ---
 work_package_id: WP01
 title: Config & Model Changes
-lane: planned
+lane: "doing"
 dependencies: []
+base_branch: master
+base_commit: 78c19143c79ae7bba90daa1ded5150e618a8332d
+created_at: '2026-03-20T14:56:56.191242+00:00'
 subtasks:
 - T001
 - T002
@@ -12,7 +15,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "29528"
 review_status: ''
 reviewed_by: ''
 history:
