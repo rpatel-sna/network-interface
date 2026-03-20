@@ -47,11 +47,11 @@
 **Estimated size**: ~380 lines
 
 ### Included Subtasks
-- [ ] T006 Create `network_inventory/db/external_source.py` with `load_devices_from_external_db(settings)` signature
-- [ ] T007 Implement external MariaDB connection with `connect_timeout=5`; `sys.exit(1)` on `mariadb.Error`
-- [ ] T008 Implement row validation — skip + `WARNING` on missing `ip_address`, `device_type`, `username`, `password`; default `hostname` to `ip_address`, `ssh_port` to `22`
-- [ ] T009 Implement deduplication by `ip_address`; `WARNING` per dropped duplicate
-- [ ] T010 [P] Update `network_inventory/db/__init__.py` to export `load_devices_from_external_db`
+- [x] T006 Create `network_inventory/db/external_source.py` with `load_devices_from_external_db(settings)` signature
+- [x] T007 Implement external MariaDB connection with `connect_timeout=5`; `sys.exit(1)` on `mariadb.Error`
+- [x] T008 Implement row validation — skip + `WARNING` on missing `ip_address`, `device_type`, `username`, `password`; default `hostname` to `ip_address`, `ssh_port` to `22`
+- [x] T009 Implement deduplication by `ip_address`; `WARNING` per dropped duplicate
+- [x] T010 [P] Update `network_inventory/db/__init__.py` to export `load_devices_from_external_db`
 
 ### Implementation Notes
 - Connect with `mariadb.connect(host=..., port=..., user=..., password=..., database=..., connect_timeout=5)`.
