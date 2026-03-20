@@ -15,7 +15,7 @@ subtasks:
 - T019
 phase: Phase 2 - Integration
 assignee: ''
-agent: ''
+agent: "claude-sonnet-4-6"
 shell_pid: "38292"
 review_status: ''
 reviewed_by: ''
@@ -286,3 +286,4 @@ Reviewer checks:
 ## Activity Log
 
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
+- 2026-03-20T15:37:05Z – claude-sonnet-4-6 – shell_pid=38292 – lane=doing – Assigned agent via workflow command
