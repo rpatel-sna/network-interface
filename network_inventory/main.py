@@ -6,13 +6,12 @@ Usage:
 Startup sequence:
     1. Configure logging
     2. Validate config (EnvironmentError → exit 1)
-    3. Load and validate Fernet key file
-    4. Establish MariaDB connection pool (fail-fast on error → exit 1)
-    5. Load enabled devices from DB
-    6. Handle zero-devices edge case (exit 0 with message)
-    7. Dispatch all devices to ThreadPoolExecutor
-    8. Collect results and upsert each to DB
-    9. Print completion summary and exit 0
+    3. Establish MariaDB connection pool (fail-fast on error → exit 1)
+    4. Load devices from external DB source
+    5. Handle zero-devices edge case (exit 0 with message)
+    6. Dispatch all devices to ThreadPoolExecutor
+    7. Collect results and upsert each to DB
+    8. Print completion summary and exit 0
 """
 from __future__ import annotations
 
@@ -47,36 +46,20 @@ def main() -> None:
     logger.info("Network Device Inventory CLI starting up")
 
     # ------------------------------------------------------------------
-    # Step 2: Validate Fernet key file (FR-010)
+    # Step 2: Establish DB connection pool — exits on failure (FR-013)
     # ------------------------------------------------------------------
-    from network_inventory.utils.encryption import load_key
-
-    try:
-        key = load_key(settings.encryption_key_file)
-    except (FileNotFoundError, PermissionError, ValueError) as exc:
-        logger.error("Encryption key error: %s", exc)
-        sys.exit(1)
-
-    logger.debug("Encryption key loaded from %s", settings.encryption_key_file)
-
-    # ------------------------------------------------------------------
-    # Step 3: Establish DB connection pool — exits on failure (FR-013)
-    # ------------------------------------------------------------------
-    from network_inventory.db import get_connection, get_pool, load_enabled_devices, upsert_inventory_record
+    from network_inventory.db import get_pool, upsert_inventory_record, load_devices_from_external_db
+    from network_inventory.db.connection import get_connection
 
     get_pool()  # Calls sys.exit(1) internally on mariadb.Error
 
     # ------------------------------------------------------------------
-    # Step 4: Load enabled devices (FR-001)
+    # Step 3: Load devices from external DB source (FR-001)
     # ------------------------------------------------------------------
-    conn = get_connection()
-    try:
-        devices = load_enabled_devices(conn)
-    finally:
-        conn.close()
+    devices = load_devices_from_external_db(settings)
 
     # ------------------------------------------------------------------
-    # Step 5: Zero-devices edge case
+    # Step 4: Zero-devices edge case
     # ------------------------------------------------------------------
     if not devices:
         print("No enabled devices found. Nothing to poll.")
@@ -86,7 +69,7 @@ def main() -> None:
     logger.info("Starting inventory run for %d device(s)", len(devices))
 
     # ------------------------------------------------------------------
-    # Steps 6-8: Dispatch, collect, and upsert (FR-002, FR-005, FR-006, FR-007, FR-008)
+    # Steps 5-7: Dispatch, collect, and upsert (FR-002, FR-005, FR-006, FR-007, FR-008)
     # ------------------------------------------------------------------
     from network_inventory.collectors import get_collector
     from network_inventory.models.device import CollectionResult
@@ -109,7 +92,7 @@ def main() -> None:
                 )
                 continue
 
-            collector = collector_class(device=device, key=key)
+            collector = collector_class(device=device)
             future = executor.submit(collector.collect)
             future_to_device[future] = device
 
@@ -152,7 +135,7 @@ def main() -> None:
             )
 
     # ------------------------------------------------------------------
-    # Step 9: Completion summary (FR-011)
+    # Step 8: Completion summary (FR-011)
     # ------------------------------------------------------------------
     total = sum(counts.values())
 
