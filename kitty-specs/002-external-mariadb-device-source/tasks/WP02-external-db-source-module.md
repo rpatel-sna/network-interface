@@ -1,7 +1,7 @@
 ---
 work_package_id: WP02
 title: External DB Source Module
-lane: "doing"
+lane: "done"
 dependencies: [WP01]
 base_branch: 002-external-mariadb-device-source-WP01
 base_commit: 8609129f96a6b9bc1e3511b00d861285a304854c
@@ -16,8 +16,8 @@ phase: Phase 1 - Core Implementation
 assignee: ''
 agent: "claude-sonnet-4-6"
 shell_pid: "42447"
-review_status: ''
-reviewed_by: ''
+review_status: "approved"
+reviewed_by: "rpatel-hk"
 history:
 - timestamp: '2026-03-20T14:42:47Z'
   lane: planned
@@ -307,3 +307,4 @@ Reviewer checks:
 - 2026-03-20T15:01:40Z – claude-sonnet-4-6 – shell_pid=30738 – lane=doing – Assigned agent via workflow command
 - 2026-03-20T15:04:47Z – claude-sonnet-4-6 – shell_pid=30738 – lane=for_review – Ready for review: db/external_source.py with connection, validation, deduplication; db/__init__.py updated
 - 2026-03-20T15:53:20Z – claude-sonnet-4-6 – shell_pid=42447 – lane=doing – Started review via workflow command
+- 2026-03-20T15:54:00Z – claude-sonnet-4-6 – shell_pid=42447 – lane=done – Review passed: external_source.py correct — connect_timeout=5, name-based column mapping, falsy validation covers empty strings, deduplication with WARNING, id fallback to enumerate index; db/__init__.py minimal change leaving load_enabled_devices for WP03
