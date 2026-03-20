@@ -1,7 +1,7 @@
 ---
 work_package_id: WP01
 title: Config & Model Changes
-lane: "for_review"
+lane: "doing"
 dependencies: []
 base_branch: master
 base_commit: 78c19143c79ae7bba90daa1ded5150e618a8332d
@@ -15,7 +15,7 @@ subtasks:
 phase: Phase 0 - Foundation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "29528"
+shell_pid: "42186"
 review_status: ''
 reviewed_by: ''
 history:
@@ -222,3 +222,4 @@ Reviewer should verify:
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
 - 2026-03-20T14:56:56Z – claude-sonnet-4-6 – shell_pid=29528 – lane=doing – Assigned agent via workflow command
 - 2026-03-20T14:57:50Z – claude-sonnet-4-6 – shell_pid=29528 – lane=for_review – Ready for review: config.py (EXT_DB_* fields, no encryption_key_file), Device.password str, .env.example updated
+- 2026-03-20T15:52:32Z – claude-sonnet-4-6 – shell_pid=42186 – lane=doing – Started review via workflow command
