@@ -15,11 +15,11 @@
 **Estimated size**: ~280 lines
 
 ### Included Subtasks
-- [ ] T001 Remove `encryption_key_file` field and `ENCRYPTION_KEY_FILE` from `network_inventory/config.py`
-- [ ] T002 Add `ext_db_host`, `ext_db_port`, `ext_db_user`, `ext_db_password`, `ext_db_name`, `ext_db_query` fields to `Settings` in `config.py`
-- [ ] T003 Update `_load_settings()` required-var check to use new `EXT_DB_*` vars instead of `ENCRYPTION_KEY_FILE`
-- [ ] T004 Change `Device.password: bytes` → `str` in `network_inventory/models/device.py`; update docstring
-- [ ] T005 [P] Update `network_inventory/.env.example` — replace `ENCRYPTION_KEY_FILE` block with `EXT_DB_*` entries
+- [x] T001 Remove `encryption_key_file` field and `ENCRYPTION_KEY_FILE` from `network_inventory/config.py`
+- [x] T002 Add `ext_db_host`, `ext_db_port`, `ext_db_user`, `ext_db_password`, `ext_db_name`, `ext_db_query` fields to `Settings` in `config.py`
+- [x] T003 Update `_load_settings()` required-var check to use new `EXT_DB_*` vars instead of `ENCRYPTION_KEY_FILE`
+- [x] T004 Change `Device.password: bytes` → `str` in `network_inventory/models/device.py`; update docstring
+- [x] T005 [P] Update `network_inventory/.env.example` — replace `ENCRYPTION_KEY_FILE` block with `EXT_DB_*` entries
 
 ### Implementation Notes
 - `EXT_DB_PORT` defaults to `3306`; all other `EXT_DB_*` vars are required.
