@@ -1,7 +1,7 @@
 ---
 work_package_id: WP04
 title: Update Collectors and main.py Wiring
-lane: "for_review"
+lane: "doing"
 dependencies:
 - WP02
 base_branch: 002-external-mariadb-device-source-WP02
@@ -16,7 +16,7 @@ subtasks:
 phase: Phase 2 - Integration
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "38292"
+shell_pid: "43260"
 review_status: ''
 reviewed_by: ''
 history:
@@ -288,3 +288,4 @@ Reviewer checks:
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
 - 2026-03-20T15:37:05Z – claude-sonnet-4-6 – shell_pid=38292 – lane=doing – Assigned agent via workflow command
 - 2026-03-20T15:40:05Z – claude-sonnet-4-6 – shell_pid=38292 – lane=for_review – Ready for review: base_collector.py and ruckus_wireless.py updated to use plaintext password directly; main.py wired to load_devices_from_external_db(); Fernet key step removed; key=key removed from collector instantiation
+- 2026-03-20T15:56:05Z – claude-sonnet-4-6 – shell_pid=43260 – lane=doing – Started review via workflow command
