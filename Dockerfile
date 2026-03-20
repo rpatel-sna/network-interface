@@ -11,4 +11,4 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["python", "network_inventory/main.py"]
+CMD ["python", "-m", "network_inventory.main"]

@@ -6,37 +6,57 @@ A CLI tool that SSH-polls network devices and writes serial numbers, firmware ve
 
 ## Prerequisites
 
-- Python 3.11+
-- MariaDB 10.6+ accessible from the host running the tool
+- macOS (Apple Silicon or Intel)
+- [Docker Desktop for Mac](https://www.docker.com/products/docker-desktop/) installed and running
 - SSH reachable on all target devices (port 22 by default)
 
 ---
 
-## 1. Install
+## 1. Start MariaDB with Docker
 
-```bash
-python3.11 -m venv .venv
-source .venv/bin/activate          # Windows: .venv\Scripts\activate
-pip install -r requirements.txt
+Create a `docker-compose.yml` in the project root:
+
+```yaml
+services:
+  mariadb:
+    image: mariadb:10.6
+    container_name: inventory-db
+    restart: unless-stopped
+    environment:
+      MARIADB_ROOT_PASSWORD: rootpassword
+      MARIADB_DATABASE: inventory
+      MARIADB_USER: inventory_user
+      MARIADB_PASSWORD: strong_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mariadb_data:/var/lib/mysql
+
+volumes:
+  mariadb_data:
 ```
 
-**Dependencies installed:**
+Start the database:
 
-| Package | Version | Purpose |
-|---|---|---|
-| `netmiko` | ≥4.3,<5.0 | SSH device automation |
-| `mariadb` | ≥1.1,<2.0 | MariaDB connector |
-| `cryptography` | ≥42.0,<44.0 | Fernet password encryption |
-| `python-dotenv` | ≥1.0,<2.0 | `.env` file loading |
+```bash
+docker compose up -d
+```
+
+Wait a few seconds for MariaDB to initialize, then verify it is running:
+
+```bash
+docker compose ps
+```
 
 ---
 
-## 2. Create the database schema
-
-Apply the schema to your MariaDB instance:
+## 2. Apply the database schema
 
 ```bash
-mysql -u root -p <your_database> < kitty-specs/001-network-device-inventory-cli/contracts/schema.sql
+docker cp kitty-specs/001-network-device-inventory-cli/contracts/schema.sql \
+    inventory-db:/tmp/schema.sql
+docker exec inventory-db mariadb -u root -prootpassword inventory \
+    -e "source /tmp/schema.sql"
 ```
 
 This creates two tables:
@@ -68,12 +88,17 @@ This creates two tables:
 
 > `last_success` is **never overwritten** by a failed or timed-out poll — it always reflects the most recent successful run.
 
-Create a minimal-privilege DB user for the tool:
+The `docker-compose.yml` above creates `inventory_user` automatically. If you need additional privileges or a custom user, connect as root:
+
+```bash
+docker exec -it inventory-db mariadb -u root -prootpassword inventory
+```
+
+Then run:
 
 ```sql
-CREATE USER 'inventory_user'@'%' IDENTIFIED BY 'strong_password';
-GRANT SELECT ON your_database.devices TO 'inventory_user'@'%';
-GRANT INSERT, UPDATE ON your_database.device_inventory TO 'inventory_user'@'%';
+GRANT SELECT ON inventory.devices TO 'inventory_user'@'%';
+GRANT INSERT, UPDATE ON inventory.device_inventory TO 'inventory_user'@'%';
 FLUSH PRIVILEGES;
 ```
 
@@ -84,9 +109,10 @@ FLUSH PRIVILEGES;
 Device passwords are stored Fernet-encrypted in the database. Generate a key once and keep it safe:
 
 ```bash
-python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())" \
-    > /secure/path/inventory.key
-chmod 600 /secure/path/inventory.key
+docker run --rm python:3.11-slim \
+    sh -c "pip install -q cryptography && python -c 'from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())'" \
+    > ~/inventory.key
+chmod 600 ~/inventory.key
 ```
 
 > **Back this file up.** If it is lost, the encrypted passwords in the `devices` table cannot be recovered.
@@ -95,23 +121,28 @@ chmod 600 /secure/path/inventory.key
 
 ## 4. Configure environment variables
 
+Copy the example env file and edit it:
+
 ```bash
 cp network_inventory/.env.example .env
-# Edit .env with your values
 ```
+
+Set these values in `.env`:
 
 | Variable | Required | Default | Description |
 |---|---|---|---|
-| `DB_HOST` | Yes | — | MariaDB hostname or IP |
+| `DB_HOST` | Yes | — | `host.docker.internal` (to reach the Docker MariaDB from another container) or `127.0.0.1` (when running the tool directly on macOS) |
 | `DB_PORT` | No | `3306` | MariaDB port |
-| `DB_USER` | Yes | — | MariaDB username |
-| `DB_PASSWORD` | Yes | — | MariaDB password |
-| `DB_NAME` | Yes | — | Database name |
-| `ENCRYPTION_KEY_FILE` | Yes | — | Absolute path to the Fernet key file |
+| `DB_USER` | Yes | — | `inventory_user` |
+| `DB_PASSWORD` | Yes | — | `strong_password` |
+| `DB_NAME` | Yes | — | `inventory` |
+| `ENCRYPTION_KEY_FILE` | Yes | — | Path to the Fernet key file (see below) |
 | `MAX_THREADS` | No | `10` | Max parallel SSH workers |
 | `SSH_TIMEOUT` | No | `30` | SSH connection timeout (seconds) |
 | `LOG_FILE` | No | `inventory.log` | Log output file path |
 | `LOG_LEVEL` | No | `INFO` | Log verbosity: `DEBUG`, `INFO`, or `WARNING` |
+
+**DB_HOST note:** Use `127.0.0.1` when running the tool on macOS directly. Use `host.docker.internal` when running the tool inside a Docker container.
 
 The tool validates all required variables at startup and exits with a descriptive error if any are missing.
 
@@ -119,18 +150,25 @@ The tool validates all required variables at startup and exits with a descriptiv
 
 ## 5. Add devices to the database
 
-Passwords must be encrypted before inserting. Use this helper:
+Passwords must be encrypted before inserting. Use this one-liner with Docker:
 
-```python
-from cryptography.fernet import Fernet
-
-key = open('/secure/path/inventory.key', 'rb').read().strip()
-f = Fernet(key)
-encrypted = f.encrypt(b"my_device_password")
-print(encrypted.decode())   # paste this into devices.password
+```bash
+docker run --rm \
+    -v ~/inventory.key:/tmp/inventory.key:ro \
+    python:3.11-slim \
+    sh -c "pip install -q cryptography && python -c \
+\"from cryptography.fernet import Fernet; \
+key=open('/tmp/inventory.key','rb').read().strip(); \
+f=Fernet(key); print(f.encrypt(b'my_device_password').decode())\""
 ```
 
-Then insert a device:
+Replace `my_device_password` with the actual SSH password for the device.
+
+Copy the printed ciphertext, then insert the device:
+
+```bash
+docker exec -it inventory-db mariadb -u inventory_user -pstrong_password inventory
+```
 
 ```sql
 INSERT INTO devices (hostname, ip_address, ssh_port, username, password, device_type, enabled)
@@ -141,11 +179,23 @@ See [Supported device types](#supported-device-types) for valid `device_type` va
 
 ---
 
-## 6. Run the tool
+## 6. Build the tool image
 
 ```bash
-source .venv/bin/activate
-python network_inventory/main.py
+docker build -t network-inventory .
+```
+
+---
+
+## 7. Run the tool
+
+```bash
+docker run --rm \
+    --env-file .env \
+    -e DB_HOST=host.docker.internal \
+    -v ~/inventory.key:/app/inventory.key:ro \
+    -e ENCRYPTION_KEY_FILE=/app/inventory.key \
+    network-inventory
 ```
 
 The tool runs non-interactively and exits when all devices have been polled. On completion:
@@ -199,22 +249,39 @@ Devices with an unrecognised `device_type` are **skipped** with a `WARNING` log 
 
 ## Running tests
 
-Integration tests require a live MariaDB instance. Configure the test database via environment variables before running:
+Integration tests require a live MariaDB instance. The Docker MariaDB started in step 1 can serve as the test database. Apply the schema to a separate test database first:
 
 ```bash
-export TEST_DB_HOST=127.0.0.1
-export TEST_DB_PORT=3306
-export TEST_DB_USER=root
-export TEST_DB_PASSWORD=
-export TEST_DB_NAME=test_inventory
+docker exec -i inventory-db mariadb -u root -prootpassword -e \
+    "CREATE DATABASE IF NOT EXISTS test_inventory;"
+docker exec -i inventory-db mariadb -u root -prootpassword test_inventory \
+    < kitty-specs/001-network-device-inventory-cli/contracts/schema.sql
+```
 
-pytest tests/integration/ -v
+Run the tests inside a container so the Python environment matches:
+
+```bash
+docker run --rm \
+    --env-file .env \
+    -e DB_HOST=host.docker.internal \
+    -e TEST_DB_HOST=host.docker.internal \
+    -e TEST_DB_PORT=3306 \
+    -e TEST_DB_USER=root \
+    -e TEST_DB_PASSWORD=rootpassword \
+    -e TEST_DB_NAME=test_inventory \
+    -v ~/inventory.key:/app/inventory.key:ro \
+    -e ENCRYPTION_KEY_FILE=/app/inventory.key \
+    network-inventory \
+    python -m pytest tests/integration/ -v
 ```
 
 To skip tests that require real network devices (safe for CI):
 
 ```bash
-pytest tests/integration/ -v -m "not real_device"
+docker run --rm \
+    ... \
+    network-inventory \
+    python -m pytest tests/integration/ -v -m "not real_device"
 ```
 
 The test database must have the schema applied and will be seeded automatically by the test fixtures (devices with ID 1 enabled, ID 2 disabled).
@@ -256,14 +323,78 @@ except ImportError:
     pass
 ```
 
+Rebuild the image after adding a new collector:
+
+```bash
+docker build -t network-inventory .
+```
+
 ---
 
-## Scheduling (cron example)
+## Scheduling (launchd example)
 
-To run inventory collection daily at 2 AM:
+To run inventory collection daily at 2 AM on macOS, create a launchd plist at `~/Library/LaunchAgents/com.inventory.plist`:
 
-```cron
-0 2 * * * cd /path/to/repo && /path/to/repo/.venv/bin/python network_inventory/main.py >> /var/log/inventory-cron.log 2>&1
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN"
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>Label</key>
+    <string>com.inventory</string>
+    <key>ProgramArguments</key>
+    <array>
+        <string>/usr/local/bin/docker</string>
+        <string>run</string>
+        <string>--rm</string>
+        <string>--env-file</string>
+        <string>/Users/YOUR_USERNAME/my-project/.env</string>
+        <string>-e</string>
+        <string>DB_HOST=host.docker.internal</string>
+        <string>-v</string>
+        <string>/Users/YOUR_USERNAME/inventory.key:/app/inventory.key:ro</string>
+        <string>-e</string>
+        <string>ENCRYPTION_KEY_FILE=/app/inventory.key</string>
+        <string>network-inventory</string>
+    </array>
+    <key>StartCalendarInterval</key>
+    <dict>
+        <key>Hour</key>
+        <integer>2</integer>
+        <key>Minute</key>
+        <integer>0</integer>
+    </dict>
+    <key>StandardOutPath</key>
+    <string>/tmp/inventory.log</string>
+    <key>StandardErrorPath</key>
+    <string>/tmp/inventory-error.log</string>
+</dict>
+</plist>
+```
+
+Load it:
+
+```bash
+launchctl load ~/Library/LaunchAgents/com.inventory.plist
+```
+
+Replace `YOUR_USERNAME` with your macOS username (`echo $USER`).
+
+---
+
+## Stopping and cleaning up
+
+Stop the MariaDB container (data is preserved in the Docker volume):
+
+```bash
+docker compose down
+```
+
+To also delete all stored data:
+
+```bash
+docker compose down -v
 ```
 
 ---
@@ -273,8 +404,9 @@ To run inventory collection daily at 2 AM:
 | Symptom | Likely cause | Fix |
 |---|---|---|
 | `Configuration error: Missing required environment variables: DB_HOST` | `.env` file not loaded or variable missing | Check `.env` exists in the working directory and contains the variable |
-| `Encryption key error: [Errno 2] No such file or directory` | `ENCRYPTION_KEY_FILE` path wrong | Verify the path in `.env` points to the key file |
-| Exit code 1 immediately, no devices polled | DB unreachable | Verify `DB_HOST`, `DB_PORT`, credentials, and network access |
-| All devices `timeout` | SSH port blocked | Check firewall rules from the tool host to device management IPs |
+| `Encryption key error: [Errno 2] No such file or directory` | `ENCRYPTION_KEY_FILE` path wrong or key not mounted | Verify the `-v` mount and `ENCRYPTION_KEY_FILE` path in the `docker run` command |
+| Exit code 1 immediately, no devices polled | DB unreachable | Confirm `docker compose ps` shows MariaDB healthy; use `DB_HOST=host.docker.internal` from inside a container |
+| `Can't connect to MariaDB` from container | Wrong host | Use `host.docker.internal` as `DB_HOST`, not `127.0.0.1` or `localhost` |
+| All devices `timeout` | SSH port blocked | Check macOS firewall and network rules from the Docker container to device management IPs |
 | Device skipped with WARNING | Unknown `device_type` | Check the `device_type` value in `devices` table matches a [supported type](#supported-device-types) |
 | `serial_number` / `firmware_version` is NULL | Regex did not match device output | Set `LOG_LEVEL=DEBUG` and inspect log for the output excerpt |
