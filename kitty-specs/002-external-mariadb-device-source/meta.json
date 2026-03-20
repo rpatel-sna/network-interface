@@ -2,8 +2,10 @@
   "feature_number": "002",
   "slug": "002-external-mariadb-device-source",
   "feature_slug": "002-external-mariadb-device-source",
-  "friendly_name": "external mariadb device source",
+  "friendly_name": "External MariaDB Device Source",
   "mission": "software-dev",
+  "source_description": "Replace manual device management in local MariaDB with a query to an external MariaDB database. Device credentials provided in plaintext; Fernet encryption removed. SSH polling, result storage, and reporting pipeline unchanged.",
   "target_branch": "master",
-  "created_at": "2026-03-20T13:24:30.861874+00:00"
+  "created_at": "2026-03-20T13:24:30.861874+00:00",
+  "vcs": "git"
 }
