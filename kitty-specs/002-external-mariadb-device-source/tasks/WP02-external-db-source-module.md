@@ -1,7 +1,7 @@
 ---
 work_package_id: WP02
 title: External DB Source Module
-lane: "for_review"
+lane: "doing"
 dependencies: [WP01]
 base_branch: 002-external-mariadb-device-source-WP01
 base_commit: 8609129f96a6b9bc1e3511b00d861285a304854c
@@ -15,7 +15,7 @@ subtasks:
 phase: Phase 1 - Core Implementation
 assignee: ''
 agent: "claude-sonnet-4-6"
-shell_pid: "30738"
+shell_pid: "42447"
 review_status: ''
 reviewed_by: ''
 history:
@@ -306,3 +306,4 @@ Reviewer checks:
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
 - 2026-03-20T15:01:40Z – claude-sonnet-4-6 – shell_pid=30738 – lane=doing – Assigned agent via workflow command
 - 2026-03-20T15:04:47Z – claude-sonnet-4-6 – shell_pid=30738 – lane=for_review – Ready for review: db/external_source.py with connection, validation, deduplication; db/__init__.py updated
+- 2026-03-20T15:53:20Z – claude-sonnet-4-6 – shell_pid=42447 – lane=doing – Started review via workflow command
