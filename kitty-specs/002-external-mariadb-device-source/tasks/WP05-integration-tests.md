@@ -1,7 +1,7 @@
 ---
 work_package_id: WP05
 title: Integration Tests
-lane: "doing"
+lane: "for_review"
 dependencies: [WP04]
 base_branch: 002-external-mariadb-device-source-WP04
 base_commit: 801c2434b1bc10642e83d2c2a536b9063ebdfddb
@@ -277,3 +277,4 @@ Reviewer checks:
 
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
 - 2026-03-20T15:41:18Z – claude-sonnet-4-6 – shell_pid=39492 – lane=doing – Assigned agent via workflow command
+- 2026-03-20T15:51:04Z – claude-sonnet-4-6 – shell_pid=39492 – lane=for_review – Ready for review: conftest.py updated with external_db_conn/ext_db_settings fixtures; test_db.py has TestLoadDevicesFromExternalDb covering happy path, zero rows, missing ip, duplicates, unreachable DB; test_full_run.py uses EXT_DB_* env vars and tests external source wiring
