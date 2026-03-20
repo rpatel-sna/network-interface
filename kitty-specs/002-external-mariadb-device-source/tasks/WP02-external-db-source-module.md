@@ -1,8 +1,11 @@
 ---
 work_package_id: WP02
 title: External DB Source Module
-lane: planned
+lane: "doing"
 dependencies: [WP01]
+base_branch: 002-external-mariadb-device-source-WP01
+base_commit: 8609129f96a6b9bc1e3511b00d861285a304854c
+created_at: '2026-03-20T15:01:39.613238+00:00'
 subtasks:
 - T006
 - T007
@@ -12,7 +15,7 @@ subtasks:
 phase: Phase 1 - Core Implementation
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "30738"
 review_status: ''
 reviewed_by: ''
 history:
