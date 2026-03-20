@@ -11,17 +11,20 @@ load_dotenv()  # No-op if .env absent; env vars already set take precedence
 
 @dataclass
 class Settings:
-    # Database (required)
+    # Local results database (required)
     db_host: str = field(default_factory=lambda: os.environ["DB_HOST"])
     db_port: int = field(default_factory=lambda: int(os.getenv("DB_PORT", "3306")))
     db_user: str = field(default_factory=lambda: os.environ["DB_USER"])
     db_password: str = field(default_factory=lambda: os.environ["DB_PASSWORD"])
     db_name: str = field(default_factory=lambda: os.environ["DB_NAME"])
 
-    # Encryption key file (required)
-    encryption_key_file: str = field(
-        default_factory=lambda: os.environ["ENCRYPTION_KEY_FILE"]
-    )
+    # External device source database (required)
+    ext_db_host: str = field(default_factory=lambda: os.environ["EXT_DB_HOST"])
+    ext_db_port: int = field(default_factory=lambda: int(os.getenv("EXT_DB_PORT", "3306")))
+    ext_db_user: str = field(default_factory=lambda: os.environ["EXT_DB_USER"])
+    ext_db_password: str = field(default_factory=lambda: os.environ["EXT_DB_PASSWORD"])
+    ext_db_name: str = field(default_factory=lambda: os.environ["EXT_DB_NAME"])
+    ext_db_query: str = field(default_factory=lambda: os.environ["EXT_DB_QUERY"])
 
     # Tuning (optional with defaults)
     max_threads: int = field(
@@ -38,7 +41,11 @@ class Settings:
 
 def _load_settings() -> Settings:
     missing = []
-    for var in ("DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME", "ENCRYPTION_KEY_FILE"):
+    for var in (
+        "DB_HOST", "DB_USER", "DB_PASSWORD", "DB_NAME",
+        "EXT_DB_HOST", "EXT_DB_USER", "EXT_DB_PASSWORD",
+        "EXT_DB_NAME", "EXT_DB_QUERY",
+    ):
         if not os.getenv(var):
             missing.append(var)
     if missing:

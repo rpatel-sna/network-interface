@@ -8,14 +8,14 @@ from typing import Literal
 
 @dataclass
 class Device:
-    """Represents a row from the `devices` table."""
+    """Represents a device record sourced from the external database."""
 
     id: int
     hostname: str
     ip_address: str
     ssh_port: int
     username: str
-    password: bytes          # Fernet-encrypted; decrypted only at SSH connection time
+    password: str            # Plaintext SSH password from external device source
     device_type: str
     enabled: bool
 
