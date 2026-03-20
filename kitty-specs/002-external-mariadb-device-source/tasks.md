@@ -145,9 +145,9 @@
 **Estimated size**: ~300 lines
 
 ### Included Subtasks
-- [ ] T020 Update `tests/integration/conftest.py` — remove Fernet/encryption fixtures; add `external_db_conn` fixture and `ext_db_settings` fixture pointing to a test external DB
-- [ ] T021 Update `tests/integration/test_db.py` — remove encryption tests; add `test_load_devices_from_external_db` covering: happy path, zero-row result, row with missing `ip_address`, duplicate rows, unreachable DB (mocked/monkeypatched)
-- [ ] T022 Update `tests/integration/test_full_run.py` — replace local device table sourcing with external DB fixture; verify full run completes with external device list
+- [x] T020 Update `tests/integration/conftest.py` — remove Fernet/encryption fixtures; add `external_db_conn` fixture and `ext_db_settings` fixture pointing to a test external DB
+- [x] T021 Update `tests/integration/test_db.py` — remove encryption tests; add `test_load_devices_from_external_db` covering: happy path, zero-row result, row with missing `ip_address`, duplicate rows, unreachable DB (mocked/monkeypatched)
+- [x] T022 Update `tests/integration/test_full_run.py` — replace local device table sourcing with external DB fixture; verify full run completes with external device list
 
 ### Implementation Notes
 - For unreachable DB test: monkeypatch `mariadb.connect` to raise `mariadb.Error`; verify `SystemExit` with code 1.
