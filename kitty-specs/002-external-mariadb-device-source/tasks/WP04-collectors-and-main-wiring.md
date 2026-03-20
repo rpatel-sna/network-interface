@@ -1,9 +1,12 @@
 ---
 work_package_id: WP04
 title: Update Collectors and main.py Wiring
-lane: planned
+lane: "doing"
 dependencies:
 - WP02
+base_branch: 002-external-mariadb-device-source-WP02
+base_commit: 58161d63ca33ed412099a8cfc862b42e3d27f9ce
+created_at: '2026-03-20T15:37:04.899339+00:00'
 subtasks:
 - T015
 - T016
@@ -13,7 +16,7 @@ subtasks:
 phase: Phase 2 - Integration
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "38292"
 review_status: ''
 reviewed_by: ''
 history:
