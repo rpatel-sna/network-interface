@@ -1,8 +1,11 @@
 ---
 work_package_id: WP03
 title: Remove Encryption and Trim DB Layer
-lane: planned
+lane: "doing"
 dependencies: [WP01]
+base_branch: 002-external-mariadb-device-source-WP01
+base_commit: 8609129f96a6b9bc1e3511b00d861285a304854c
+created_at: '2026-03-20T15:32:44.373075+00:00'
 subtasks:
 - T011
 - T012
@@ -11,7 +14,7 @@ subtasks:
 phase: Phase 1 - Core Implementation
 assignee: ''
 agent: ''
-shell_pid: ''
+shell_pid: "37075"
 review_status: ''
 reviewed_by: ''
 history:
