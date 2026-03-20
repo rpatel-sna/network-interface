@@ -14,7 +14,7 @@ subtasks:
 - T005
 phase: Phase 0 - Foundation
 assignee: ''
-agent: ''
+agent: "claude-sonnet-4-6"
 shell_pid: "29528"
 review_status: ''
 reviewed_by: ''
@@ -220,3 +220,4 @@ Reviewer should verify:
 ## Activity Log
 
 - 2026-03-20T14:42:47Z – system – lane=planned – Prompt created.
+- 2026-03-20T14:56:56Z – claude-sonnet-4-6 – shell_pid=29528 – lane=doing – Assigned agent via workflow command
