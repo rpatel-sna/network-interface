@@ -64,13 +64,13 @@ An operator can configure the external database connection (host, port, user, pa
 
 ### Functional Requirements
 
-- **FR-001**: The tool MUST connect to a configurable external MariaDB database at startup to source the device list.
+- **FR-001**: The tool MUST connect to a configurable external MariaDB database once at startup, execute the configured query to retrieve the full device list, then close the external connection before beginning SSH polling.
 - **FR-002**: The tool MUST execute a user-supplied SQL query against the external database to retrieve device records.
-- **FR-003**: The external DB connection parameters (host, port, user, password, database name) MUST be configurable via environment variables.
+- **FR-003**: The external DB connection parameters (host, port, user, password, database name) MUST be configurable via environment variables. SSL/TLS is not required — plain TCP authentication is sufficient.
 - **FR-004**: The SQL query MUST be configurable via an environment variable or configuration file without code changes.
 - **FR-005**: Device SSH credentials (username and password) returned by the external query MUST be used as plaintext — no decryption step.
 - **FR-006**: The tool MUST NOT require a Fernet encryption key file to start or operate.
-- **FR-007**: If the external DB is unreachable or the query fails, the tool MUST log a descriptive error and exit with a non-zero code.
+- **FR-007**: If the external DB is unreachable or the query fails, the tool MUST log a descriptive error and exit with a non-zero code. The connection attempt MUST time out after 5 seconds.
 - **FR-008**: If the external query returns zero device rows, the tool MUST log a warning and exit cleanly with code 0.
 - **FR-009**: Device rows missing required fields (host/IP) MUST be skipped with a per-row warning; the remaining devices MUST still be processed.
 - **FR-010**: Duplicate device entries returned by the external query MUST be deduplicated before SSH polling begins.
@@ -80,7 +80,7 @@ An operator can configure the external database connection (host, port, user, pa
 ### Key Entities
 
 - **External Device Record**: A row returned by the user-supplied SQL query. Must contain at minimum: `hostname` or `ip_address`, `device_type`, `username`, `password`. Additional columns are ignored.
-- **External DB Connection**: Configuration for connecting to the source database (host, port, user, password, db name, optional connection timeout).
+- **External DB Connection**: Configuration for connecting to the source database (host, port, user, password, db name). Connection uses plain TCP with a fixed 5-second timeout.
 
 ## Success Criteria *(mandatory)*
 
@@ -91,6 +91,14 @@ An operator can configure the external database connection (host, port, user, pa
 - **SC-003**: Removing the Fernet key file from the system does not cause the tool to fail or emit any encryption-related errors.
 - **SC-004**: Changing the external DB connection settings or SQL query in the environment takes effect on the next run without code changes or redeployment.
 - **SC-005**: A misconfigured or unreachable external DB results in a clear, actionable error message within 10 seconds of startup.
+
+## Clarifications
+
+### Session 2026-03-20
+
+- Q: Does the external DB connection require SSL/TLS, or username/password only? → A: Username/password only, no SSL. Port is configurable via environment variable (already covered by FR-003).
+- Q: Should the external DB be queried once at startup or support re-querying mid-run? → A: Once at startup only — the tool queries, polls all devices, and exits.
+- Q: Should the external DB connection timeout be fixed or configurable? → A: Fixed 5-second default, not configurable via env var.
 
 ## Assumptions
 
