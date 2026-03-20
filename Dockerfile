@@ -1,12 +1,14 @@
-FROM almalinux:10.1
+FROM python:3.11-slim
 
-RUN dnf install -y python3.11 python3.11-pip gcc mariadb-devel && \
-    dnf clean all
+RUN apt-get update && apt-get install -y \
+    gcc \
+    libmariadb-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
 COPY requirements.txt .
-RUN pip3.11 install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 COPY . .
 
-CMD ["tail", "-f", "/dev/null"]
+CMD ["python", "network_inventory/main.py"]
